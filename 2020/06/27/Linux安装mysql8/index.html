@@ -6,22 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.liguras.cn">
-  <title>hello-world | Liguras的博客</title>
+  <title>Linux安装mysql8.0 | Liguras的博客</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="hello-world于2020&#x2F;06&#x2F;13 重新营业blog，记录问题、笔记，分享。">
+  <meta name="description" content="Linux安装Mysql8.0.20准备工作1、环境1、linux版本 centos7 2、安装mysql版本 mysql8.0 2、下载mysql源安装包到本地https:&#x2F;&#x2F;dev.mysql.com&#x2F;downloads&#x2F;repo&#x2F;yum&#x2F;  3、上传mysql安装源至服务器123456# 切换到安装目录cd &#x2F;usr&#x2F;local# 选择要上传的mysqlrz # 查看是否上传成功ls  4、">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hello-world">
-<meta property="og:url" content="http://www.liguras.cn/2020/06/13/hello-world/index.html">
+<meta property="og:title" content="Linux安装mysql8.0">
+<meta property="og:url" content="http://www.liguras.cn/2020/06/27/Linux%E5%AE%89%E8%A3%85mysql8/index.html">
 <meta property="og:site_name" content="Liguras的博客">
-<meta property="og:description" content="hello-world于2020&#x2F;06&#x2F;13 重新营业blog，记录问题、笔记，分享。">
+<meta property="og:description" content="Linux安装Mysql8.0.20准备工作1、环境1、linux版本 centos7 2、安装mysql版本 mysql8.0 2、下载mysql源安装包到本地https:&#x2F;&#x2F;dev.mysql.com&#x2F;downloads&#x2F;repo&#x2F;yum&#x2F;  3、上传mysql安装源至服务器123456# 切换到安装目录cd &#x2F;usr&#x2F;local# 选择要上传的mysqlrz # 查看是否上传成功ls  4、">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-06-13T06:11:41.000Z">
-<meta property="article:modified_time" content="2020-06-13T06:19:10.901Z">
+<meta property="og:image" content="http://i1.fuimg.com/721925/285fd4508f7a86c1.png">
+<meta property="og:image" content="http://i1.fuimg.com/721925/52648a899cd991a7.png">
+<meta property="og:image" content="http://i2.tiimg.com/721925/e13a5b1d2c62fbaf.png">
+<meta property="og:image" content="http://i2.tiimg.com/721925/a38ce8311258125b.png">
+<meta property="article:published_time" content="2020-06-27T03:06:50.000Z">
+<meta property="article:modified_time" content="2020-06-27T03:07:45.191Z">
 <meta property="article:author" content="Liguras">
-<meta property="article:tag" content="随笔">
+<meta property="article:tag" content="linux,mysql">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://i1.fuimg.com/721925/285fd4508f7a86c1.png">
   
     <link rel="alternative" href="/atom.xml" title="Liguras的博客" type="application/atom+xml">
   
@@ -190,14 +195,14 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-hello-world" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Linux安装mysql8" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
   
   
     <h1 class="article-title" itemprop="name">
-      hello-world
+      Linux安装mysql8.0
     </h1>
   
 
@@ -209,8 +214,8 @@
               <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
         </span>
 
-<a href="/2020/06/13/hello-world/" class="archive-article-date">
-        <time datetime="2020-06-13T06:11:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-13</time>
+<a href="/2020/06/27/Linux%E5%AE%89%E8%A3%85mysql8/" class="archive-article-date">
+        <time datetime="2020-06-27T03:06:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-27</time>
 </a>
 
   
@@ -223,7 +228,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">18字</span>
+      <span class="post-count">648字</span>
     </span>
   </span>
 
@@ -232,7 +237,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">2分</span>
     </span>
   </span>
 </div>
@@ -243,7 +248,58 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="hello-world"><a href="#hello-world" class="headerlink" title="hello-world"></a>hello-world</h1><p>于2020/06/13 重新营业blog，记录问题、笔记，分享。</p>
+    <h1 id="Linux安装Mysql8-0-20"><a href="#Linux安装Mysql8-0-20" class="headerlink" title="Linux安装Mysql8.0.20"></a>Linux安装Mysql8.0.20</h1><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="1、环境"><a href="#1、环境" class="headerlink" title="1、环境"></a>1、环境</h3><p>1、linux版本</p>
+<p>centos7</p>
+<p>2、安装mysql版本</p>
+<p>mysql8.0</p>
+<h3 id="2、下载mysql源安装包到本地"><a href="#2、下载mysql源安装包到本地" class="headerlink" title="2、下载mysql源安装包到本地"></a>2、下载mysql源安装包到本地</h3><p><a href="https://dev.mysql.com/downloads/repo/yum/" target="_blank" rel="noopener">https://dev.mysql.com/downloads/repo/yum/</a></p>
+<p><img src="http://i1.fuimg.com/721925/285fd4508f7a86c1.png" alt="mysql"></p>
+<h3 id="3、上传mysql安装源至服务器"><a href="#3、上传mysql安装源至服务器" class="headerlink" title="3、上传mysql安装源至服务器"></a>3、上传mysql安装源至服务器</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 切换到安装目录</span></span><br><span class="line">cd /usr/local</span><br><span class="line"><span class="meta">#</span><span class="bash"> 选择要上传的mysql</span></span><br><span class="line">rz </span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看是否上传成功</span></span><br><span class="line">ls</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、安装"><a href="#4、安装" class="headerlink" title="4、安装"></a>4、安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum localinstall mysql80-community-release-el7-3.noarch.rpm</span><br><span class="line"><span class="meta">#</span><span class="bash"> 静静等待安装，中途需要确认是否安装，输入y即可</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5、检查是否安装成功"><a href="#5、检查是否安装成功" class="headerlink" title="5、检查是否安装成功"></a>5、检查是否安装成功</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@test-houtai local]# yum repolist enabled | grep "mysql.*-community.*"</span><br><span class="line">mysql-connectors-community/x86_64       MySQL Connectors Community          153</span><br><span class="line">mysql-tools-community/x86_64            MySQL Tools Community               110</span><br><span class="line">mysql80-community/x86_64                MySQL 8.0 Community Server          177</span><br></pre></td></tr></table></figure>
+
+<h3 id="6、安装mysql-server"><a href="#6、安装mysql-server" class="headerlink" title="6、安装mysql-server"></a>6、安装mysql-server</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install mysql-community-server</span><br></pre></td></tr></table></figure>
+
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><h3 id="1、启动前"><a href="#1、启动前" class="headerlink" title="1、启动前"></a>1、启动前</h3><p>启动前先设置下配置文件，设置表名大小写不敏感。（这一步要是在启动mysql服务后设置会不生效，这一块走了很多弯路，项目跑不起来，导致删库重装）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 编辑mysql配置文件</span></span><br><span class="line">vi /etc/my.cnf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 在最后面添加 </span></span><br><span class="line">lower_case_table_names=1</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://i1.fuimg.com/721925/52648a899cd991a7.png" alt=""></p>
+<h3 id="2、启动"><a href="#2、启动" class="headerlink" title="2、启动"></a>2、启动</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 启动mysql</span></span><br><span class="line">systemctl start mysqld</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、查看启动状态"><a href="#3、查看启动状态" class="headerlink" title="3、查看启动状态"></a>3、查看启动状态</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl status mysqld</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、设置开机启动"><a href="#4、设置开机启动" class="headerlink" title="4、设置开机启动"></a>4、设置开机启动</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable mysqld</span><br><span class="line">systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="1、查看初始密码"><a href="#1、查看初始密码" class="headerlink" title="1、查看初始密码"></a>1、查看初始密码</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep 'temporary password' /var/log/mysqld.log</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://i2.tiimg.com/721925/e13a5b1d2c62fbaf.png" alt=""></p>
+<h3 id="2、登录mysql"><a href="#2、登录mysql" class="headerlink" title="2、登录mysql"></a>2、登录mysql</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql -uroot -p</span><br><span class="line"><span class="meta">#</span><span class="bash"> 然后要输入密码，输入上面查询出来的密码，密码是不可见的</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3、修改密码"><a href="#3、修改密码" class="headerlink" title="3、修改密码"></a>3、修改密码</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ALTER USER 'root'@'localhost' IDENTIFIED BY 'TestBicon@123';</span><br><span class="line">或者</span><br><span class="line">set password for 'root'@'localhost'=password('TestBicon@123');</span><br><span class="line">注意：mysql8.0密码必须包含大小写字母、数字和特殊符号，并且长度不能少于8位</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、添加远程用户"><a href="#4、添加远程用户" class="headerlink" title="4、添加远程用户"></a>4、添加远程用户</h3><p>默认只允许root帐户在本地登录，如果要在其它机器上连接mysql，必须修改root允许远程连接，或者添加一个允许远程连接的帐户。</p>
+<h4 id="1、选择mysql数据库"><a href="#1、选择mysql数据库" class="headerlink" title="1、选择mysql数据库"></a>1、选择mysql数据库</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 此时应该还在mysql命令行下，如果退出了，重新登录一下</span></span><br><span class="line">use mysql</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、添加远程用户"><a href="#2、添加远程用户" class="headerlink" title="2、添加远程用户"></a>2、添加远程用户</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update user set host='%' where user ='root';</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、使修改生效"><a href="#3、使修改生效" class="headerlink" title="3、使修改生效"></a>3、使修改生效</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5、开放3306端口"><a href="#5、开放3306端口" class="headerlink" title="5、开放3306端口"></a>5、开放3306端口</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/sbin/iptables -I INPUT -p tcp --dport 3306 -j ACCEPT</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h2><h3 id="1、卸载软件"><a href="#1、卸载软件" class="headerlink" title="1、卸载软件"></a>1、卸载软件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum remove mysql-community-server</span><br><span class="line"><span class="meta">#</span><span class="bash"> 完成后，运行下面命令查查看</span></span><br><span class="line">rpm -qa|grep mysql</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://i2.tiimg.com/721925/a38ce8311258125b.png" alt=""></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 然后删除一一删除</span></span><br><span class="line">yum remove 文件名</span><br><span class="line"><span class="meta">#</span><span class="bash"> 再使用命令查看</span></span><br><span class="line">rpm -qa | grep -i mysql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 如果有结果，则使用下面命令删除，没有则没事</span></span><br><span class="line">rpm -e 文件名</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、删除文件"><a href="#2、删除文件" class="headerlink" title="2、删除文件"></a>2、删除文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rm -rf /var/lib/mysql</span><br><span class="line">rm /etc/my.cnf</span><br><span class="line">rm -rf /usr/share/mysql-8.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、其他"><a href="#3、其他" class="headerlink" title="3、其他"></a>3、其他</h3><p>如果需要重新安装，在安装完成启动之前可以先对mysql目录赋予权限防止异常发生</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod -R 777 /var/lib/mysql</span><br></pre></td></tr></table></figure>
+
 
     
 
@@ -280,7 +336,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="http://www.liguras.cn/2020/06/13/hello-world/" title="hello-world" target="_blank">http://www.liguras.cn/2020/06/13/hello-world/</a>
+          <a href="http://www.liguras.cn/2020/06/27/Linux安装mysql8/" title="Linux安装mysql8.0" target="_blank">http://www.liguras.cn/2020/06/27/Linux安装mysql8/</a>
         </li>
         
         <li>
@@ -302,7 +358,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">linux,mysql</a>
         		</li>
       		
 		</ul>
@@ -358,7 +414,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-     <!-- <img src="//pan.baidu.com/share/qrcode?url=http://www.liguras.cn/2020/06/13/hello-world/" alt="微信分享二维码"> -->
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=http://www.liguras.cn/2020/06/27/Linux%E5%AE%89%E8%A3%85mysql8/" alt="微信分享二维码"> -->
     </div>
 </div>
 
@@ -373,15 +429,20 @@
 
 <nav id="article-nav">
   
-    <a href="/2020/06/27/Linux%E5%90%84%E8%BD%AF%E4%BB%B6%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/06/27/Linux%E5%AE%89%E8%A3%85java/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Linux各软件常用命令
+          Linux安装java
         
       </div>
     </a>
   
+  
+    <a href="/2020/06/27/Linux%E5%90%84%E8%BD%AF%E4%BB%B6%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux各软件常用命令</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -420,9 +481,9 @@
     <script src="/lib/gitment.js"></script>
   
   <script>
-    <!-- id: "hello-world" -->
+    <!-- id: "Linux安装mysql8.0" -->
     var gitment = new Gitment({
-      id: "20200613141141",
+      id: "20200627110650",
       owner: 'liguras',
       repo: 'liguras.github.io',
       oauth: {
