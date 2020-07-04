@@ -10,16 +10,16 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="Mysql8备份一、介绍在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份 全量备份​        顾名思义，备份数据库目前已有的全部数据。 增量备份​        增量备份是指在一次全备份或上一次增量备份后，以后每次的备份只需备份与前一次相比增加或者被修改的文件。这就意味着，第一次增量备份的对象是进">
+  <meta name="description" content="Mysql备份一、介绍在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份 全量备份​        顾名思义，备份数据库目前已有的全部数据。 增量备份​        增量备份是指在一次全备份或上一次增量备份后，以后每次的备份只需备份与前一次相比增加或者被修改的文件。这就意味着，第一次增量备份的对象是进行">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux备份mysql">
 <meta property="og:url" content="http://www.liguras.cn/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/index.html">
 <meta property="og:site_name" content="Liguras">
-<meta property="og:description" content="Mysql8备份一、介绍在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份 全量备份​        顾名思义，备份数据库目前已有的全部数据。 增量备份​        增量备份是指在一次全备份或上一次增量备份后，以后每次的备份只需备份与前一次相比增加或者被修改的文件。这就意味着，第一次增量备份的对象是进">
+<meta property="og:description" content="Mysql备份一、介绍在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份 全量备份​        顾名思义，备份数据库目前已有的全部数据。 增量备份​        增量备份是指在一次全备份或上一次增量备份后，以后每次的备份只需备份与前一次相比增加或者被修改的文件。这就意味着，第一次增量备份的对象是进行">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://qcx88euju.bkt.clouddn.com/my.png">
 <meta property="article:published_time" content="2020-07-04T11:46:29.000Z">
-<meta property="article:modified_time" content="2020-07-04T11:47:14.777Z">
+<meta property="article:modified_time" content="2020-07-04T11:52:30.955Z">
 <meta property="article:author" content="Liguras">
 <meta property="article:tag" content="linux">
 <meta property="article:tag" content="mysql">
@@ -258,7 +258,7 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="Mysql8备份"><a href="#Mysql8备份" class="headerlink" title="Mysql8备份"></a>Mysql8备份</h1><h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份</p>
+    <h1 id="Mysql备份"><a href="#Mysql备份" class="headerlink" title="Mysql备份"></a>Mysql备份</h1><h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份</p>
 <h3 id="全量备份"><a href="#全量备份" class="headerlink" title="全量备份"></a>全量备份</h3><p>​        顾名思义，备份数据库目前已有的全部数据。</p>
 <h3 id="增量备份"><a href="#增量备份" class="headerlink" title="增量备份"></a>增量备份</h3><p>​        增量备份是指在一次全备份或上一次增量备份后，以后每次的备份只需备份与前一次相比增加或者被修改的文件。这就意味着，第一次增量备份的对象是进行全备后所产生的增加和修改的文件；第二次增量备份的对象是进行第一次增量备份后所产生的增加和修改的文件，如此类推。这种备份方式最显著的优点就是：没有重复的备份数据，因此备份的数据量不大，备份所需的时间很短。但增量备份的数据恢复是比较麻烦的。您必须具有上一次全备份和所有增量备份磁带（一旦丢失或损坏其中的一个增量，就会造成恢复的失败），并且它们必须沿着从全备份到依次增量备份的时间顺序逐个反推恢复，因此这就极大地延长了恢复时间。</p>
 <p>​        假如我们有一个数据库，有100G的数据，每天会增加20M的数据，数据库每天都要全量备份一次，这样的话服务器的压力比较大，因此我们只需要备份增加的这部分数据，这样减少服务器的负担。</p>
@@ -608,11 +608,11 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">mysql8</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -620,7 +620,7 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">mysql8</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
             
             <div class="clearfix"></div>

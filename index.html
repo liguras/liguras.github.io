@@ -236,7 +236,7 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="Mysql8备份"><a href="#Mysql8备份" class="headerlink" title="Mysql8备份"></a>Mysql8备份</h1><h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份</p>
+    <h1 id="Mysql备份"><a href="#Mysql备份" class="headerlink" title="Mysql备份"></a>Mysql备份</h1><h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份</p>
 <h3 id="全量备份"><a href="#全量备份" class="headerlink" title="全量备份"></a>全量备份</h3><p>​        顾名思义，备份数据库目前已有的全部数据。</p>
 <h3 id="增量备份"><a href="#增量备份" class="headerlink" title="增量备份"></a>增量备份</h3><p>​        增量备份是指在一次全备份或上一次增量备份后，以后每次的备份只需备份与前一次相比增加或者被修改的文件。这就意味着，第一次增量备份的对象是进行全备后所产生的增加和修改的文件；第二次增量备份的对象是进行第一次增量备份后所产生的增加和修改的文件，如此类推。这种备份方式最显著的优点就是：没有重复的备份数据，因此备份的数据量不大，备份所需的时间很短。但增量备份的数据恢复是比较麻烦的。您必须具有上一次全备份和所有增量备份磁带（一旦丢失或损坏其中的一个增量，就会造成恢复的失败），并且它们必须沿着从全备份到依次增量备份的时间顺序逐个反推恢复，因此这就极大地延长了恢复时间。</p>
 <p>​        假如我们有一个数据库，有100G的数据，每天会增加20M的数据，数据库每天都要全量备份一次，这样的话服务器的压力比较大，因此我们只需要备份增加的这部分数据，这样减少服务器的负担。</p>
@@ -668,17 +668,24 @@ java -version
 <pre><code>./nginx -s quit</code></pre><h3 id="4-重启，reload命令会重新加载配置文件，nginx服务不会中断。"><a href="#4-重启，reload命令会重新加载配置文件，nginx服务不会中断。" class="headerlink" title="4. 重启，reload命令会重新加载配置文件，nginx服务不会中断。"></a>4. 重启，reload命令会重新加载配置文件，nginx服务不会中断。</h3><p>切换到/usr/local/ngnix/sbin目录下，然后执行下面命令：</p>
 <pre><code>./nginx -s reload</code></pre><h3 id="5-查看nginx是否启动"><a href="#5-查看nginx是否启动" class="headerlink" title="5. 查看nginx是否启动"></a>5. 查看nginx是否启动</h3><pre><code>ps aux|grep nginx</code></pre><h2 id="修改config文件"><a href="#修改config文件" class="headerlink" title="修改config文件"></a>修改config文件</h2><ol>
 <li><p>切换到/usr/local/nginx目录</p>
-<pre><code>cd /usr/local/nginx</code></pre></li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/nginx</span><br></pre></td></tr></table></figure>
+</li>
 <li><p>修改config配置文件</p>
-<p>vi conf/nginx.conf</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi conf/nginx.conf</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>重新加载Nginx</p>
-<p>./sbin/nginx -s reload</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./sbin/nginx -s reload</span><br></pre></td></tr></table></figure>
+
+
 </li>
 </ol>
 <h1 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h1><h2 id="Tomcat启动、停止"><a href="#Tomcat启动、停止" class="headerlink" title="Tomcat启动、停止"></a>Tomcat启动、停止</h2><p>切换到tomcat安装路径的bin目录下</p>
-<pre><code>cd /usr/local/tomcat/bin</code></pre><h3 id="1-启动-1"><a href="#1-启动-1" class="headerlink" title="1.启动"></a>1.启动</h3><pre><code>./startup.sh</code></pre><h3 id="2-停止"><a href="#2-停止" class="headerlink" title="2.停止"></a>2.停止</h3><pre><code>./stutdown.sh</code></pre><h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h2 id="Redis启动、停止"><a href="#Redis启动、停止" class="headerlink" title="Redis启动、停止"></a>Redis启动、停止</h2><h3 id="1-启动-2"><a href="#1-启动-2" class="headerlink" title="1.启动"></a>1.启动</h3><p>进入redis安装目录的bin目录</p>
-<pre><code>cd /usr/local/redis/bin</code></pre><ul>
+<pre><code>cd /usr/local/tomcat/bin</code></pre><h3 id="1-启动-1"><a href="#1-启动-1" class="headerlink" title="1.启动"></a>1.启动</h3><pre><code>./startup.sh</code></pre><h3 id="2-停止"><a href="#2-停止" class="headerlink" title="2.停止"></a>2.停止</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./stutdown.sh</span><br></pre></td></tr></table></figure>
+
+<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h2 id="Redis启动、停止"><a href="#Redis启动、停止" class="headerlink" title="Redis启动、停止"></a>Redis启动、停止</h2><h3 id="1-启动-2"><a href="#1-启动-2" class="headerlink" title="1.启动"></a>1.启动</h3><p>进入redis安装目录的bin目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/redis/bin</span><br></pre></td></tr></table></figure>
+
+<ul>
 <li><p>直接启动,Ctrl + C后会停止</p>
 <p>./redis-server</p>
 </li>
@@ -687,12 +694,15 @@ java -version
 </li>
 <li><p>修改配置文件，后台启动(推荐)</p>
 <p>1、复制redis目录下的redis.conf文件到bin目录下</p>
-<pre><code>cp /usr/local/redis/redis.conf /usr/local/redis/bin/
-2、修改bin下面的redis.conf
-vi bin/redis.conf
-3、找到daemonize no改为yes
-注：快速查找字符串shell  :/daemo</code></pre></li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/local/redis/redis.conf /usr/local/redis/bin/</span><br></pre></td></tr></table></figure>
+
+<p>2、修改bin下面的redis.conf</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi bin/redis.conf</span><br></pre></td></tr></table></figure>
+
+
+</li>
 </ul>
+<p>  3、找到daemonize no改为yes<br>      注：快速查找字符串shell  :/daemo</p>
 <p><img src="http://i2.tiimg.com/721925/1fe54b453ac2fcff.png" alt="daemonize"></p>
 <h3 id="2-停止-1"><a href="#2-停止-1" class="headerlink" title="2.停止"></a>2.停止</h3><ol>
 <li><p>查找redis运行端口号</p>
@@ -961,11 +971,11 @@ vi bin/redis.conf
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">mysql8</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -973,7 +983,7 @@ vi bin/redis.conf
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">mysql8</a>
+                <a href="javascript:void(0)" class="js-tag color5">java</a>
               </li>
             
             <div class="clearfix"></div>
