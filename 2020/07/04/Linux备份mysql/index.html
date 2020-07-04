@@ -6,20 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.liguras.cn">
-  <title>Archives | Liguras</title>
+  <title>Linux备份mysql | Liguras</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="CV工程师">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Liguras">
-<meta property="og:url" content="http://www.liguras.cn/archives/index.html">
+  <meta name="description" content="Mysql8备份一、介绍在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份 全量备份​        顾名思义，备份数据库目前已有的全部数据。 增量备份​        增量备份是指在一次全备份或上一次增量备份后，以后每次的备份只需备份与前一次相比增加或者被修改的文件。这就意味着，第一次增量备份的对象是进">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux备份mysql">
+<meta property="og:url" content="http://www.liguras.cn/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/index.html">
 <meta property="og:site_name" content="Liguras">
-<meta property="og:description" content="CV工程师">
+<meta property="og:description" content="Mysql8备份一、介绍在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份 全量备份​        顾名思义，备份数据库目前已有的全部数据。 增量备份​        增量备份是指在一次全备份或上一次增量备份后，以后每次的备份只需备份与前一次相比增加或者被修改的文件。这就意味着，第一次增量备份的对象是进">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://qcx88euju.bkt.clouddn.com/my.png">
+<meta property="article:published_time" content="2020-07-04T11:46:29.000Z">
+<meta property="article:modified_time" content="2020-07-04T11:47:14.777Z">
 <meta property="article:author" content="Liguras">
-<meta property="article:tag" content="分享、笔记、后端、java">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="mysql">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://qcx88euju.bkt.clouddn.com/my.png">
   
     <link rel="alternative" href="/atom.xml" title="Liguras" type="application/atom+xml">
   
@@ -200,41 +205,155 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Linux备份mysql" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" class="archive-article-date">
-        <time datetime="2020-07-04T11:46:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-04</time>
-</a>
-
-        </div>
-    	 
+      <header class="article-header">
   
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" target="_blank">Linux备份mysql</a>
   
+    <h1 class="article-title" itemprop="name">
+      Linux备份mysql
     </h1>
   
 
 
-        <div class="article-info info-on-right">
+  
+  
+        
+        <span id="busuanzi_container_page_pv" style='display:none' class="archive-article-date">
+              <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+        </span>
+
+<a href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" class="archive-article-date">
+        <time datetime="2020-07-04T11:46:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-04</time>
+</a>
+
+  
+  
+    
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">2.5k字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">10分</span>
+    </span>
+  </span>
+</div>
+
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="Mysql8备份"><a href="#Mysql8备份" class="headerlink" title="Mysql8备份"></a>Mysql8备份</h1><h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份</p>
+<h3 id="全量备份"><a href="#全量备份" class="headerlink" title="全量备份"></a>全量备份</h3><p>​        顾名思义，备份数据库目前已有的全部数据。</p>
+<h3 id="增量备份"><a href="#增量备份" class="headerlink" title="增量备份"></a>增量备份</h3><p>​        增量备份是指在一次全备份或上一次增量备份后，以后每次的备份只需备份与前一次相比增加或者被修改的文件。这就意味着，第一次增量备份的对象是进行全备后所产生的增加和修改的文件；第二次增量备份的对象是进行第一次增量备份后所产生的增加和修改的文件，如此类推。这种备份方式最显著的优点就是：没有重复的备份数据，因此备份的数据量不大，备份所需的时间很短。但增量备份的数据恢复是比较麻烦的。您必须具有上一次全备份和所有增量备份磁带（一旦丢失或损坏其中的一个增量，就会造成恢复的失败），并且它们必须沿着从全备份到依次增量备份的时间顺序逐个反推恢复，因此这就极大地延长了恢复时间。</p>
+<p>​        假如我们有一个数据库，有100G的数据，每天会增加20M的数据，数据库每天都要全量备份一次，这样的话服务器的压力比较大，因此我们只需要备份增加的这部分数据，这样减少服务器的负担。</p>
+<h3 id="binlog（增量备份要开启）"><a href="#binlog（增量备份要开启）" class="headerlink" title="binlog（增量备份要开启）"></a>binlog（增量备份要开启）</h3><p>​        binlog日志由配置文件的log-bin选项负责启用，Mysql服务器将在数据根目录创建两个新文 件XXX-bin.001和xxx-bin.index，若配置选项没有给出文件名，Mysql将使用主机名称命名这两个文件，其中.index文件包含一份全体日志文件的清单。  Mysql会把用户对所有数据库的内容和结构的修改情况记入XXX-bin.n文件，而不会记录 SELECT和没有实际更新的UPDATE语句。<br>​        当MySQL数据库停止或重启时，服务器会把日志文件记入下一个日志文件，Mysql会在重启时生成一个新的binlog日志文件，文件序号递增，此外，如果日志文件超过max_binlog_size系统变量配置的上限时，也会生成新的日志文件。</p>
+<h3 id="备份场景"><a href="#备份场景" class="headerlink" title="备份场景"></a>备份场景</h3><p>​        数据量大：每周1、2次全量备份，每天一次增量备份</p>
+<p>​        数据量小：每天一次全量备份</p>
+<h2 id="二、备份"><a href="#二、备份" class="headerlink" title="二、备份"></a>二、备份</h2><h3 id="1-备份前"><a href="#1-备份前" class="headerlink" title="1.备份前"></a>1.备份前</h3><p>1、开启binlog日志</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1、编辑mysql配置文件</span></span><br><span class="line">vi /etc/my.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 在文件末尾然后添加下面的代码</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 若log_bin后面不指定路径，则默认存储在mysql的data目录下,也就是/var/lib/mysql</span></span><br><span class="line">log-bin=mysql-bin</span><br><span class="line"><span class="meta">#</span><span class="bash"> 保存退出</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2、查看binlog开启情况</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入mysql</span></span><br><span class="line">mysql -uroot -p</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查询</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show variables like <span class="string">'log_bin%'</span>;</span></span><br><span class="line">+---------------------------------+--------------------------------+</span><br><span class="line">| Variable_name                   | Value                          |</span><br><span class="line">+---------------------------------+--------------------------------+</span><br><span class="line">| log_bin                         | ON                             |</span><br><span class="line">| log_bin_basename                | /var/lib/mysql/mysql-bin       |</span><br><span class="line">| log_bin_index                   | /var/lib/mysql/mysql-bin.index |</span><br><span class="line">| log_bin_trust_function_creators | OFF                            |</span><br><span class="line">| log_bin_use_v1_row_events       | OFF                            |</span><br><span class="line">+---------------------------------+--------------------------------+</span><br><span class="line">5 rows in set (0.00 sec)</span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以看到log_bin已经ON了，代表开启了</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="http://qcx88euju.bkt.clouddn.com/my.png" alt="my"></p>
+<h3 id="2-开始备份：全量备份"><a href="#2-开始备份：全量备份" class="headerlink" title="2.开始备份：全量备份"></a>2.开始备份：全量备份</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 全量备份命令</span></span><br><span class="line">mysqldump --single-transaction --flush-logs --master-data=2 -uroot -p密码  数据库名 &gt; xxx.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 举例</span></span><br><span class="line">mysqldump --single-transaction --flush-logs --master-data=2 -uroot -p123456 test &gt; backup.sql</span><br></pre></td></tr></table></figure>
+
+<h4 id="参数介绍："><a href="#参数介绍：" class="headerlink" title="参数介绍："></a>参数介绍：</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--single-transaction: 利用事务的一致性，保证备份过程中的数据一致性。</span><br><span class="line"><span class="meta">#</span><span class="bash"> 注意：--single-transaction 只是针对Innodb引擎，如果是Myisam引擎则要用 --lock-all-tables</span></span><br><span class="line">--flush-logs： 开始备份之前刷新mysql服务器日志文件</span><br><span class="line">--master-data=2:  将二进制日志文件的名称和位置备份</span><br><span class="line">三个参数一起使用能达到将锁定时间大大减少的目的</span><br></pre></td></tr></table></figure>
+
+<h4 id="shell脚本-定时跑该脚本，定时备份"><a href="#shell脚本-定时跑该脚本，定时备份" class="headerlink" title="shell脚本(定时跑该脚本，定时备份)"></a>shell脚本(定时跑该脚本，定时备份)</h4><p>目录结构：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@test-houtai mysql]# pwd</span><br><span class="line">/usr/local/mysql</span><br><span class="line">[root@test-houtai mysql]# ls</span><br><span class="line">backup  daily  fullback.sh  inback.sh  log</span><br><span class="line"><span class="meta">#</span><span class="bash"> 目录介绍，以下目录及文件的名称及存放位置可自行修改，只要shell脚本里对应好就行</span></span><br><span class="line">--backup:全量备份存储的目录</span><br><span class="line">--daily：增量日志存储的没有了</span><br><span class="line">--fullback.sh: 全量备份的shell脚本</span><br><span class="line">--inback.sh：增量备份的shell脚本</span><br><span class="line">--log： 备份日志</span><br><span class="line"></span><br><span class="line">[root@test-houtai log]# ls</span><br><span class="line">back.log  dbBack.log</span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">log</span>目录下还有两个文件，分别是back.log:增量备份的日志，dbBack.log:全量备份的日志</span></span><br></pre></td></tr></table></figure>
+
+<p>shell脚本：fullback.sh</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 以下涉及到的路径可自行配置，需要先创建好目录</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> fullback.sh</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash">获取当前时间</span></span><br><span class="line">date_now=$(date "+%Y%m%d-%H%M%S")</span><br><span class="line">backUpFolder=/usr/local/mysql/backup</span><br><span class="line">username="root"</span><br><span class="line">password="Voxtech@2020"</span><br><span class="line"><span class="meta">#</span><span class="bash"> 需要备份的库</span></span><br><span class="line">db_name="vox_system"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">全量备份日志</span></span><br><span class="line">logFile=/usr/local/mysql/log/dbBack.log</span><br><span class="line"><span class="meta">#</span><span class="bash">定义备份文件名</span></span><br><span class="line">fileName="$&#123;db_name&#125;_$&#123;date_now&#125;.sql"</span><br><span class="line"><span class="meta">#</span><span class="bash">定义备份文件目录</span></span><br><span class="line">backUpFileName="$&#123;backUpFolder&#125;/$&#123;fileName&#125;"</span><br><span class="line"><span class="meta">#</span><span class="bash">备份前先清空binlog</span></span><br><span class="line">mysql -uroot -pVoxtech@2020 -e "RESET MASTER;"：</span><br><span class="line">echo "starting backup mysql $&#123;db_name&#125; at $&#123;date_now&#125;." &gt;&gt; $logFile</span><br><span class="line"><span class="meta">#</span><span class="bash"> 备份</span></span><br><span class="line">mysqldump -u$&#123;username&#125; -p$&#123;password&#125;  --single-transaction --flush-logs $&#123;db_name&#125; &gt; $&#123;backUpFileName&#125;</span><br><span class="line"><span class="meta">#</span><span class="bash">进入到备份文件目录</span></span><br><span class="line">cd $&#123;backUpFolder&#125;</span><br><span class="line"><span class="meta">#</span><span class="bash">压缩备份文件</span></span><br><span class="line">tar -zcvf $&#123;fileName&#125;.tar.gz $&#123;fileName&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 备份结束日期</span></span><br><span class="line">date_end=$(date "+%Y%m%d-%H%M%S")</span><br><span class="line">echo "finish backup mysql database $&#123;db_name&#125; at $&#123;date_end&#125;." &gt;&gt; $logFile</span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除sql文件，不删也可以，建议保留一段时间内的备份</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> rm -f <span class="variable">$&#123;fileName&#125;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 全量备份完后删除前一个星期的增量备份</span></span><br><span class="line">rm -rf /usr/local/mysql/daily/*</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-开始备份：增量备份"><a href="#3-开始备份：增量备份" class="headerlink" title="3.开始备份：增量备份"></a>3.开始备份：增量备份</h3><p>增量备份只是将mysql产生的binlog日志提取出来，没有专门的备份命令，只需要将文件复制到你想要存储的位置就行</p>
+<h4 id="shell脚本（为了定时任务跑，定时备份增量数据）"><a href="#shell脚本（为了定时任务跑，定时备份增量数据）" class="headerlink" title="shell脚本（为了定时任务跑，定时备份增量数据）"></a>shell脚本（为了定时任务跑，定时备份增量数据）</h4><p>inback.sh</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> inback.sh</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash">在使用之前，请提前创建以下各个目录</span></span><br><span class="line"><span class="meta">#</span><span class="bash">增量备份时复制mysql-bin.00000*的目标目录，提前手动创建这个目录</span></span><br><span class="line">backupDir=/usr/local/mysql/daily</span><br><span class="line"><span class="meta">#</span><span class="bash">mysql的数据目录</span></span><br><span class="line">mysqlDir=/var/lib/mysql</span><br><span class="line"><span class="meta">#</span><span class="bash">mysql的index文件路径，放在数据目录下的</span></span><br><span class="line">logFile=/usr/local/mysql/log/back.log</span><br><span class="line">BinFile=/var/lib/mysql/mysql-bin.index</span><br><span class="line"><span class="meta">#</span><span class="bash">这个是用于产生新的mysql-bin.00000*文件</span></span><br><span class="line">mysqladmin -uroot -pVoxtech@2020 flush-logs</span><br><span class="line"><span class="meta">#</span><span class="bash"> wc -l 统计行数</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> awk 简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。</span></span><br><span class="line">Counter=`wc -l $BinFile |awk '&#123;print $1&#125;'`</span><br><span class="line">NextNum=0</span><br><span class="line"><span class="meta">#</span><span class="bash">这个<span class="keyword">for</span>循环用于比对<span class="variable">$Counter</span>,<span class="variable">$NextNum</span>这两个值来确定文件是不是存在或最新的</span></span><br><span class="line">for file in `cat $BinFile`</span><br><span class="line">do</span><br><span class="line">    base=`basename $file`</span><br><span class="line">    echo $base</span><br><span class="line">    #basename用于截取mysql-bin.00000*文件名，去掉./mysql-bin.000005前面的./</span><br><span class="line">    NextNum=`expr $NextNum + 1`</span><br><span class="line">    if [ $NextNum -eq $Counter ]</span><br><span class="line">    then</span><br><span class="line">        echo $base skip! &gt;&gt; $logFile</span><br><span class="line">    else</span><br><span class="line">        dest=$backupDir/$base</span><br><span class="line">        if(test -e $dest)</span><br><span class="line">        #test -e用于检测目标文件是否存在，存在就写exist!到$logFile去</span><br><span class="line">        then</span><br><span class="line">            echo $base exist! &gt;&gt; $logFile</span><br><span class="line">        else</span><br><span class="line">            cp $mysqlDir/$base $backupDir</span><br><span class="line">            echo $base copying &gt;&gt; $logFile</span><br><span class="line">         fi</span><br><span class="line">     fi</span><br><span class="line">done</span><br><span class="line">echo `date +"%Y年%m月%d日 %H:%M:%S"` $Next Bakup succ! &gt;&gt; $logFile</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、测试"><a href="#4、测试" class="headerlink" title="4、测试"></a>4、测试</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入备份目录</span></span><br><span class="line">cd /usr/local/mysql</span><br><span class="line">[root@test-houtai mysql]# pwd</span><br><span class="line">/usr/local/mysql</span><br><span class="line">[root@test-houtai mysql]# ls</span><br><span class="line">backup  daily  fullback.sh  inback.sh  log</span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以看到fullback.sh、inback.sh两个脚本</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 先运行全量备份的脚本</span></span><br><span class="line">[root@test-houtai mysql]# ./fullback.sh </span><br><span class="line">mysqldump: [Warning] Using a password on the command line interface can be insecure. # 这个警告是在shell脚本直接把mysql密码明文显示登录</span><br><span class="line">vox_system_20200704-104356.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 这时可以进backup目录查看备份的文件，可以看到备份好的sql文件和压缩好的sql文件</span></span><br><span class="line">[root@test-houtai mysql]# cd backup/</span><br><span class="line">[root@test-houtai backup]# ls</span><br><span class="line">vox_system_20200704-104356.sql    vox_system_20200704-104356.sql.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 接着可以对数据库做一些插入删除操作，然后可以开始做增量备份，运行inback.sh脚本</span></span><br><span class="line">[root@test-houtai mysql]# ./inback.sh </span><br><span class="line">mysqladmin: [Warning] Using a password on the command line interface can be insecure. # 同上</span><br><span class="line">mysql-bin.000001</span><br><span class="line">mysql-bin.000002</span><br><span class="line"><span class="meta">#</span><span class="bash"> 进daily目录查看增量备份的日志</span></span><br><span class="line">[root@test-houtai mysql]# cd daily/</span><br><span class="line">[root@test-houtai daily]# ls</span><br><span class="line">mysql-bin.000001</span><br><span class="line"><span class="meta">#</span><span class="bash"> 这里说明一下，inback.sh脚本里刷新日志的命令，会产生一个新的日志文件，然后脚本不会把新的日志文件复制到daily文件夹里</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 这时备份好的文件可以测试还原了，还原步骤在下面</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、还原"><a href="#三、还原" class="headerlink" title="三、还原"></a>三、还原</h2><h3 id="1-全量备份还原"><a href="#1-全量备份还原" class="headerlink" title="1. 全量备份还原"></a>1. 全量备份还原</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 还原全量备份</span></span><br><span class="line">mysql -hmysql主机  -u登录名 -p密码 需要还原的数据库 &lt; 备份好的sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 举例</span></span><br><span class="line">mysql -h172.10.10.179  -uroot -pVoxtech@2020 vox_system &lt; vox_system_20200704-104356.sql</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-增量备份还原"><a href="#2-增量备份还原" class="headerlink" title="2. 增量备份还原"></a>2. 增量备份还原</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1、先将日志转化为sql文件</span></span><br><span class="line">mysqlbinlog -d 数据库名 mysql-bin.xxxx &gt; xx.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 举例</span></span></span><br><span class="line">mysqlbinlog -d vox_system mysql-bin.000001 &gt; vox_system.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 2、运行sql还原</span></span><br><span class="line">mysql -u登录名 -p密码  数据库名 &lt; 刚刚转化好的sql文件</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 举例</span></span></span><br><span class="line">mysql -uroot -pVoxtech@2020  vox_system &lt; vox_system.sql</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、定时跑脚本备份"><a href="#四、定时跑脚本备份" class="headerlink" title="四、定时跑脚本备份"></a>四、定时跑脚本备份</h2><h3 id="1、定时任务命令"><a href="#1、定时任务命令" class="headerlink" title="1、定时任务命令"></a>1、定时任务命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> linux自带定时任务</span></span><br><span class="line">crontab -e ：新建一个定时任务</span><br><span class="line">crontab -l ：查看已创建的定时任务</span><br><span class="line">crontab -r ：删除已有的定时任务</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、创建定时任务跑脚本"><a href="#2、创建定时任务跑脚本" class="headerlink" title="2、创建定时任务跑脚本"></a>2、创建定时任务跑脚本</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 每天凌晨2点全量备份一次，cron表达式这里就不过多解释</span></span><br><span class="line">0 2 * * * /bin/bash -x /usr/local/mysql/fullback.sh &gt;/dev/null 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> /dev/null 2&gt;&amp;1 命令解释</span></span><br><span class="line">/dev/null:表示Linux的空设备文件，输出重定向到黑洞，即输出内容不打印到屏幕上</span><br><span class="line">0 —— stdin（标准输入）</span><br><span class="line">1 —— stdout （标准输出）</span><br><span class="line">2 —— stderr （标准错误）</span><br><span class="line"><span class="meta">2&gt;</span><span class="bash">&amp;1: 将标准输出等同于错误输出 输出出来</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="五、其他"><a href="#五、其他" class="headerlink" title="五、其他"></a>五、其他</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 备份MySQL数据库某个(些)表</span></span><br><span class="line">mysqldump -hhostname -uusername -ppassword databasename table1 table2 &gt; backupfile.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 同时备份多个MySQL数据库</span></span><br><span class="line">mysqldump -hhostname -uusername -ppassword –databases database1 database2 database3 &gt; multibackupfile.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 将数据库转移到新服务器</span></span><br><span class="line">mysqldump -uusername -ppassword databasename | mysql –host=*.*.*.* -C databasename</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+    
+
+    
+    <div class="page-reward">
+      <a href="javascript:void(0);" class="page-reward-btn tooltip-top" target="_self">
+        <div class="tooltip tooltip-east">
+          <span class="tooltip-item">
+            赏
+          </span>
+          <span class="tooltip-content">
+            <span class="tooltip-text">
+              <span class="tooltip-inner">
+                <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃烧烤<i
+                    class="icon icon-quo-right"></i></p>
+                <div class="reward-box">
+                  
+                  
+                </div>
+              </span>
+            </span>
+          </span>
+        </div>
+      </a>
+    </div>
+    
+
+    
+    <div class="declare"> 
+      <ul class="post-copyright">
+        <li>
+          <strong>本文作者：</strong>
+          Liguras
+        </li>
+        <li>
+          <strong>本文链接：</strong>
+          <a href="http://www.liguras.cn/2020/07/04/Linux备份mysql/" title="Linux备份mysql" target="_blank">http://www.liguras.cn/2020/07/04/Linux备份mysql/</a>
+        </li>
+        
+        <li>
+          <strong>版权声明： </strong>
           
+          本博客所有文章除特别声明外，均采用 <a href="https://github.com/JoeyBling/hexo-theme-yilia-plus/blob/master/LICENSE" rel="external nofollow" target="_blank">MIT</a> 许可协议。转载请注明出处！
+        </li>
+        
+      </ul>
+    </div>
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -250,199 +369,130 @@
 		</ul>
 	</div>
 
-          
+    
 
+    
+
+    
+    
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <!-- <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a> -->
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=http://www.liguras.cn/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" alt="微信分享二维码"> -->
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+
+    
+    <div class="clearfix"></div>
+  </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2020/06/27/Linux%E5%AE%89%E8%A3%85java/" class="archive-article-date">
-        <time datetime="2020-06-27T03:08:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-27</time>
-</a>
 
+
+<nav id="article-nav">
+  
+  
+    <a href="/2020/06/27/Linux%E5%AE%89%E8%A3%85java/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Linux安装java</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2020/06/27/Linux%E5%AE%89%E8%A3%85java/" target="_blank">Linux安装java</a>
-  
-    </h1>
-  
+        
+        
+    </div>
+</aside>
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2020/06/27/Linux%E5%AE%89%E8%A3%85mysql8/" class="archive-article-date">
-        <time datetime="2020-06-27T03:06:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-27</time>
-</a>
 
-        </div>
-    	 
+
+
+
+
+
+
   
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2020/06/27/Linux%E5%AE%89%E8%A3%85mysql8/" target="_blank">Linux安装mysql8.0</a>
+  <div id="gitment-ctn"></div>
   
-    </h1>
+    <!-- 中文 -->
+    <link rel="stylesheet" href="/lib/gitment.css">
+    <script src="/lib/gitment.js"></script>
+  
+  <script>
+    <!-- id: "Linux备份mysql" -->
+    var gitment = new Gitment({
+      id: "20200704194629",
+      owner: 'liguras',
+      repo: 'liguras.github.io',
+      oauth: {
+        client_id: 'a973b72834a3ce7596fa',
+        client_secret: '94254df5473f53170f521c02e765f32bf6d9fc04',
+      },
+    })
+    gitment.render('gitment-ctn')
+  </script>
+
+
   
 
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">mysql8</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2020/06/27/Linux%E5%90%84%E8%BD%AF%E4%BB%B6%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="archive-article-date">
-        <time datetime="2020-06-27T03:03:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-27</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2020/06/27/Linux%E5%90%84%E8%BD%AF%E4%BB%B6%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" target="_blank">Linux各软件常用命令</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2020/06/13/hello-world/" class="archive-article-date">
-        <time datetime="2020-06-13T06:11:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-13</time>
-</a>
-
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2020/06/13/hello-world/" target="_blank">hello-world</a>
-  
-    </h1>
-  
-
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -483,8 +533,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
