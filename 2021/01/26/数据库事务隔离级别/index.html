@@ -6,17 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.liguras.cn">
-  <title>Archives: 2020/7 | Liguras</title>
+  <title>数据库事务隔离级别 | Liguras</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="CV工程师">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Liguras">
-<meta property="og:url" content="http://www.liguras.cn/archives/2020/07/index.html">
+  <meta name="description" content="数据库事务隔离级别数据库四大特性（ACID）1、Atomicity ： 原子性1事务包含的所有操作要么全部成功，要么全部失败回滚    2、Consistency ：一致性12在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。这是说数据库事务不能破坏关系数据的完整性以及业务逻辑上的一致性A给B转账1000，最终结果是1000，不会变成999    3、Isolation： 隔离性1多个并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库事务隔离级别">
+<meta property="og:url" content="http://www.liguras.cn/2021/01/26/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/index.html">
 <meta property="og:site_name" content="Liguras">
-<meta property="og:description" content="CV工程师">
+<meta property="og:description" content="数据库事务隔离级别数据库四大特性（ACID）1、Atomicity ： 原子性1事务包含的所有操作要么全部成功，要么全部失败回滚    2、Consistency ：一致性12在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。这是说数据库事务不能破坏关系数据的完整性以及业务逻辑上的一致性A给B转账1000，最终结果是1000，不会变成999    3、Isolation： 隔离性1多个并">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-26T12:14:03.896Z">
+<meta property="article:modified_time" content="2021-01-26T12:13:34.874Z">
 <meta property="article:author" content="Liguras">
 <meta property="article:tag" content="分享、笔记、后端、java">
 <meta name="twitter:card" content="summary">
@@ -200,69 +202,301 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-数据库事务隔离级别" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" class="archive-article-date">
-        <time datetime="2020-07-04T11:46:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-04</time>
-</a>
-
-        </div>
-    	 
+      <header class="article-header">
   
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" target="_blank">Linux备份mysql</a>
   
+    <h1 class="article-title" itemprop="name">
+      数据库事务隔离级别
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
+  
+  
+        
+        <span id="busuanzi_container_page_pv" style='display:none' class="archive-article-date">
+              <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+        </span>
 
-          
+<a href="/2021/01/26/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.896Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+    
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">1k字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">3分</span>
+    </span>
+  </span>
+</div>
+
+
   
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="数据库事务隔离级别"><a href="#数据库事务隔离级别" class="headerlink" title="数据库事务隔离级别"></a>数据库事务隔离级别</h1><h2 id="数据库四大特性（ACID）"><a href="#数据库四大特性（ACID）" class="headerlink" title="数据库四大特性（ACID）"></a>数据库四大特性（ACID）</h2><h3 id="1、Atomicity-：-原子性"><a href="#1、Atomicity-：-原子性" class="headerlink" title="1、Atomicity ： 原子性"></a>1、Atomicity ： 原子性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">事务包含的所有操作要么全部成功，要么全部失败回滚</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、Consistency-：一致性"><a href="#2、Consistency-：一致性" class="headerlink" title="2、Consistency ：一致性"></a>2、Consistency ：一致性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。这是说数据库事务不能破坏关系数据的完整性以及业务逻辑上的一致性</span><br><span class="line">A给B转账<span class="number">1000</span>，最终结果是<span class="number">1000</span>，不会变成<span class="number">999</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3、Isolation：-隔离性"><a href="#3、Isolation：-隔离性" class="headerlink" title="3、Isolation： 隔离性"></a>3、Isolation： 隔离性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">多个并发的事务同时访问一个数据库时，一个事务不应该被另一个事务所干扰，每个并发的事务间要相互进行隔离。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4、Durability：-持久性"><a href="#4、Durability：-持久性" class="headerlink" title="4、Durability： 持久性"></a>4、Durability： 持久性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">持久性是指一个事务一旦被提交了，那么对数据库中的数据的改变就是永久性的，即便是在数据库系统遇到故障的情况下也不会丢失提交事务的操作</span><br></pre></td></tr></table></figure>
+
+<h2 id="事务问题"><a href="#事务问题" class="headerlink" title="事务问题"></a>事务问题</h2><h3 id="1、脏读"><a href="#1、脏读" class="headerlink" title="1、脏读"></a>1、脏读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 存在事务A，事务B</span></span><br><span class="line"><span class="comment">// 此时事务A往数据库插入了一条数据：StudentA，但还未提交</span></span><br><span class="line"><span class="comment">// 这时候事务B查询数据库，查询出了：StudentA，事务直接没有隔离，就产生了“脏读”</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、不可重复读"><a href="#2、不可重复读" class="headerlink" title="2、不可重复读"></a>2、不可重复读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 存在事务A、B</span></span><br><span class="line"><span class="comment">// 事务A查询了 StudentA的数据，得到StudentA的姓名为 A</span></span><br><span class="line"><span class="comment">// 这时事务B更新了StudentA，将Student的姓名改为了 B，并且已经提交了事务</span></span><br><span class="line"><span class="comment">// 然后事务A再去查看StudentA的数据，两次查询出的结果不一致</span></span><br><span class="line"><span class="comment">// 这就是不可重复读</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3、幻读"><a href="#3、幻读" class="headerlink" title="3、幻读"></a>3、幻读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 存在事务A、B</span></span><br><span class="line"><span class="comment">// 事务A查询数据库所有的信息，假设只有StudentA的信息</span></span><br><span class="line"><span class="comment">// 事务B这时插入了一条StudentB的数据</span></span><br><span class="line"><span class="comment">// 事务A想再看下StudentA的具体数据，再去查询一遍数据，发现多出来了个StudentB</span></span><br><span class="line"><span class="comment">// 这就是幻读</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四大隔离级别"><a href="#四大隔离级别" class="headerlink" title="四大隔离级别"></a>四大隔离级别</h2><h3 id="1、读未提交"><a href="#1、读未提交" class="headerlink" title="1、读未提交"></a>1、读未提交</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">多个事务时，会读取另一个事务未提交的数据。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、读已提交"><a href="#2、读已提交" class="headerlink" title="2、读已提交"></a>2、读已提交</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">只能读取其他事务已提交的数据。但是会有不可重复读的情况，即会读取其他事务修改提交后的数据。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3、可重复读"><a href="#3、可重复读" class="headerlink" title="3、可重复读"></a>3、可重复读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">读取的数据不变，不会读取其他事务提交的数据。mysql默认级别。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4、串行化"><a href="#4、串行化" class="headerlink" title="4、串行化"></a>4、串行化</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最高级别，读取时加锁，效率低。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="七种传播行为"><a href="#七种传播行为" class="headerlink" title="七种传播行为"></a>七种传播行为</h2><h3 id="1、PROPAGATION-REQUIRED"><a href="#1、PROPAGATION-REQUIRED" class="headerlink" title="1、PROPAGATION_REQUIRED"></a>1、PROPAGATION_REQUIRED</h3><p>如果当前没有事务，就创建一个新事务，如果当前存在事务，就加入该事务，该设置是最常用的设置。</p>
+<h3 id="2、PROPAGATION-SUPPORTS"><a href="#2、PROPAGATION-SUPPORTS" class="headerlink" title="2、PROPAGATION_SUPPORTS"></a>2、PROPAGATION_SUPPORTS</h3><p>支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就以非事务执行。‘</p>
+<h3 id="3、PROPAGATION-MANDATORY"><a href="#3、PROPAGATION-MANDATORY" class="headerlink" title="3、PROPAGATION_MANDATORY"></a>3、PROPAGATION_MANDATORY</h3><p>支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就抛出异常。</p>
+<h3 id="4、PROPAGATION-REQUIRES-NEW"><a href="#4、PROPAGATION-REQUIRES-NEW" class="headerlink" title="4、PROPAGATION_REQUIRES_NEW"></a>4、PROPAGATION_REQUIRES_NEW</h3><p>创建新事务，无论当前存不存在事务，都创建新事务。</p>
+<h3 id="5、PROPAGATION-NOT-SUPPORTED"><a href="#5、PROPAGATION-NOT-SUPPORTED" class="headerlink" title="5、PROPAGATION_NOT_SUPPORTED"></a>5、PROPAGATION_NOT_SUPPORTED</h3><p>以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。</p>
+<h3 id="6、PROPAGATION-NEVER"><a href="#6、PROPAGATION-NEVER" class="headerlink" title="6、PROPAGATION_NEVER"></a>6、PROPAGATION_NEVER</h3><p>以非事务方式执行，如果当前存在事务，则抛出异常。</p>
+<h3 id="7、PROPAGATION-NESTED"><a href="#7、PROPAGATION-NESTED" class="headerlink" title="7、PROPAGATION_NESTED"></a>7、PROPAGATION_NESTED</h3><p>如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>为什么会出现“脏读”？</strong>因为没有“select”操作没有规矩。</p>
+<p><strong>为什么会出现“不可重复读”？</strong>因为“update”操作没有规矩。</p>
+<p><strong>为什么会出现“幻读”？</strong>因为“insert”和“delete”操作没有规矩。</p>
+<p><strong>“读未提（Read Uncommitted）”能预防啥？</strong>啥都预防不了。</p>
+<p><strong>“读提交（Read Committed）”能预防啥？</strong>使用“快照读（Snapshot Read）”，避免“脏读”，但是可能出现“不可重复读”和“幻读”。</p>
+<p><strong>“可重复读（Repeated Red）”能预防啥？</strong>使用“快照读（Snapshot Read）”，锁住被读取记录，避免出现“脏读”、“不可重复读”，但是可能出现“幻读”。</p>
+<p><strong>“串行化（Serializable）”能预防啥？</strong>排排坐，吃果果，有效避免“脏读”、“不可重复读”、“幻读”，不过效果谁用谁知道。</p>
 
     
+
+    
+    <div class="page-reward">
+      <a href="javascript:void(0);" class="page-reward-btn tooltip-top" target="_self">
+        <div class="tooltip tooltip-east">
+          <span class="tooltip-item">
+            赏
+          </span>
+          <span class="tooltip-content">
+            <span class="tooltip-text">
+              <span class="tooltip-inner">
+                <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃烧烤<i
+                    class="icon icon-quo-right"></i></p>
+                <div class="reward-box">
+                  
+                  
+                </div>
+              </span>
+            </span>
+          </span>
+        </div>
+      </a>
+    </div>
+    
+
+    
+    <div class="declare"> 
+      <ul class="post-copyright">
+        <li>
+          <strong>本文作者：</strong>
+          Liguras
+        </li>
+        <li>
+          <strong>本文链接：</strong>
+          <a href="http://www.liguras.cn/2021/01/26/数据库事务隔离级别/" title="数据库事务隔离级别" target="_blank">http://www.liguras.cn/2021/01/26/数据库事务隔离级别/</a>
+        </li>
+        
+        <li>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，均采用 <a href="https://github.com/JoeyBling/hexo-theme-yilia-plus/blob/master/LICENSE" rel="external nofollow" target="_blank">MIT</a> 许可协议。转载请注明出处！
+        </li>
+        
+      </ul>
+    </div>
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+
+    
+    
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <!-- <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a> -->
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=http://www.liguras.cn/2021/01/26/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" alt="微信分享二维码"> -->
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+
+<nav id="article-nav">
+  
+    <a href="/2021/01/26/mysql%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          mysql更改默认存储位置
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/01/26/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">设计原则</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+  
+  <div id="gitment-ctn"></div>
+  
+    <!-- 中文 -->
+    <link rel="stylesheet" href="/lib/gitment.css">
+    <script src="/lib/gitment.js"></script>
+  
+  <script>
+    <!-- id: "数据库事务隔离级别" -->
+    var gitment = new Gitment({
+      id: "20210126201403",
+      owner: 'liguras',
+      repo: 'liguras.github.io',
+      oauth: {
+        client_id: 'a973b72834a3ce7596fa',
+        client_secret: '94254df5473f53170f521c02e765f32bf6d9fc04',
+      },
+    })
+    gitment.render('gitment-ctn')
+  </script>
+
+
+  
+
 
 
           </div>
@@ -303,8 +537,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,

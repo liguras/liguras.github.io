@@ -6,17 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.liguras.cn">
-  <title>Archives: 2020/7 | Liguras</title>
+  <title>mysql更改默认存储位置 | Liguras</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="CV工程师">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Liguras">
-<meta property="og:url" content="http://www.liguras.cn/archives/2020/07/index.html">
+  <meta name="description" content="mysql更改默认存储位置目的由于未来数据库会越来越大，服务器安装mysql默认位置的磁盘空间可能不够，这时需要将更改存储位置至磁盘宽裕的盘，于是就需要更改默认存储位置。 开整1、查看当前mysql数据存储目录12345[root@test-houtai mysql]# df -h &#x2F;var&#x2F;lib&#x2F;mysql&#x2F;文件系统                                容量  已用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql更改默认存储位置">
+<meta property="og:url" content="http://www.liguras.cn/2021/01/26/mysql%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/index.html">
 <meta property="og:site_name" content="Liguras">
-<meta property="og:description" content="CV工程师">
+<meta property="og:description" content="mysql更改默认存储位置目的由于未来数据库会越来越大，服务器安装mysql默认位置的磁盘空间可能不够，这时需要将更改存储位置至磁盘宽裕的盘，于是就需要更改默认存储位置。 开整1、查看当前mysql数据存储目录12345[root@test-houtai mysql]# df -h &#x2F;var&#x2F;lib&#x2F;mysql&#x2F;文件系统                                容量  已用">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-26T12:14:03.896Z">
+<meta property="article:modified_time" content="2021-01-26T12:13:27.671Z">
 <meta property="article:author" content="Liguras">
 <meta property="article:tag" content="分享、笔记、后端、java">
 <meta name="twitter:card" content="summary">
@@ -200,69 +202,263 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-mysql更改默认存储位置" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" class="archive-article-date">
-        <time datetime="2020-07-04T11:46:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-04</time>
-</a>
-
-        </div>
-    	 
+      <header class="article-header">
   
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" target="_blank">Linux备份mysql</a>
   
+    <h1 class="article-title" itemprop="name">
+      mysql更改默认存储位置
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
+  
+  
+        
+        <span id="busuanzi_container_page_pv" style='display:none' class="archive-article-date">
+              <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+        </span>
 
-          
+<a href="/2021/01/26/mysql%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.896Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+    
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">649字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">3分</span>
+    </span>
+  </span>
+</div>
+
+
   
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="mysql更改默认存储位置"><a href="#mysql更改默认存储位置" class="headerlink" title="mysql更改默认存储位置"></a>mysql更改默认存储位置</h1><h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>由于未来数据库会越来越大，服务器安装mysql默认位置的磁盘空间可能不够，这时需要将更改存储位置至磁盘宽裕的盘，于是就需要更改默认存储位置。</p>
+<h2 id="开整"><a href="#开整" class="headerlink" title="开整"></a>开整</h2><h3 id="1、查看当前mysql数据存储目录"><a href="#1、查看当前mysql数据存储目录" class="headerlink" title="1、查看当前mysql数据存储目录"></a>1、查看当前mysql数据存储目录</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@test-houtai mysql]# df -h /var/lib/mysql/</span><br><span class="line">文件系统                                容量  已用  可用 已用% 挂载点</span><br><span class="line">/dev/mapper/centos_test--houtai-root   50G  3.8G   47G    8% /</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以看出默认存储在/root根路径下</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2、停止mysql服务"><a href="#2、停止mysql服务" class="headerlink" title="2、停止mysql服务"></a>2、停止mysql服务</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@test-houtai home]# service mysqld stop</span><br><span class="line">Redirecting to /bin/systemctl stop mysqld.service</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、复制mysql目录"><a href="#3、复制mysql目录" class="headerlink" title="3、复制mysql目录"></a>3、复制mysql目录</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> -a 不能省</span></span><br><span class="line">cp -a /var/lib/mysql  /home/mysql</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> cp命令参数：</span></span><br><span class="line">-a：此参数的效果和同时指定”-dpR”参数相同；</span><br><span class="line">-d：当复制符号连接时，把目标文件或目录也建立为符号连接，并指向与源文件或目录连接的原始文件或目录；</span><br><span class="line">-p：保留源文件或目录的属性；</span><br><span class="line">-R/r：递归处理，将指定目录下的所有文件与子目录一并处理；</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、修改mysql配置文件"><a href="#4、修改mysql配置文件" class="headerlink" title="4、修改mysql配置文件"></a>4、修改mysql配置文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 先复制一下配置文件，以免改废了</span></span><br><span class="line">cp /etc/my.cnf /etc/my.cnfbak</span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改配置文件</span></span><br><span class="line">[client]</span><br><span class="line"><span class="meta">#</span><span class="bash"> port= 3308  -- 可配可不配</span></span><br><span class="line">socket= /home/mysql/mysql.sock   -----路径改到新的存储目录下/home/mysql</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">socket= /home/mysql/mysql.sock   -----路径改到新的存储目录下/home/mysql</span><br><span class="line">datadir= /home/mysql/mysql       -----路径改到新的存储目录下/home/mysql</span><br><span class="line"></span><br><span class="line">[mysqld_safe]</span><br><span class="line">socket=/home/mysql/mysql.sock    -----路径改到新的存储目录下/home/mysql</span><br><span class="line"></span><br><span class="line">[mysql.server]</span><br><span class="line">socket=/home/mysql.sock    -----路径改到新的存储目录下/home/mysql</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 其中[mysqld_safe]、[mysql.server] 没有 可不加</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5、启动mysql"><a href="#5、启动mysql" class="headerlink" title="5、启动mysql"></a>5、启动mysql</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql]#service mysqld start</span><br></pre></td></tr></table></figure>
+
+<h3 id="6、启动报错"><a href="#6、启动报错" class="headerlink" title="6、启动报错"></a>6、启动报错</h3><p>如果重新启动mysql失败</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看启动失败原因</span></span><br><span class="line">[root@localhost mysql]#systemctl status mysqld.service</span><br><span class="line">● mysqld.service - MySQL Server</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: failed (Result: exit-code) since 四 2019-08-15 16:18:04 CST; 9s ago</span><br><span class="line">     Docs: man:mysqld(8)</span><br><span class="line">           http://dev.mysql.com/doc/refman/en/using-systemd.html</span><br><span class="line">  Process: 22032 ExecStart=/usr/sbin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)</span><br><span class="line">  Process: 22015 ExecStartPre=/usr/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)</span><br><span class="line"> Main PID: 22032 (code=exited, status=1/FAILURE)</span><br><span class="line">   Status: "SERVER_BOOTING"</span><br><span class="line">    Error: 13 (权限不够)</span><br><span class="line"></span><br><span class="line">8月 15 16:18:04 localhost.localdomain systemd[1]: Starting MySQL Server...</span><br><span class="line">8月 15 16:18:04 localhost.localdomain systemd[1]: mysqld.service: main process exited, code=exited, status=1/FAILURE</span><br><span class="line">8月 15 16:18:04 localhost.localdomain systemd[1]: Failed to start MySQL Server.</span><br><span class="line">8月 15 16:18:04 localhost.localdomain systemd[1]: Unit mysqld.service entered failed state.</span><br><span class="line">8月 15 16:18:04 localhost.localdomain systemd[1]: mysqld.service failed.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 提示权限不够，快速关闭SElinux</span></span><br><span class="line">[root@localhost mysql]#setenforce 0</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 然后重新启动mysql</span></span><br><span class="line">[root@localhost mysql]#service mysqld start</span><br></pre></td></tr></table></figure>
+
+
+
+
+
 
     
+
+    
+    <div class="page-reward">
+      <a href="javascript:void(0);" class="page-reward-btn tooltip-top" target="_self">
+        <div class="tooltip tooltip-east">
+          <span class="tooltip-item">
+            赏
+          </span>
+          <span class="tooltip-content">
+            <span class="tooltip-text">
+              <span class="tooltip-inner">
+                <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃烧烤<i
+                    class="icon icon-quo-right"></i></p>
+                <div class="reward-box">
+                  
+                  
+                </div>
+              </span>
+            </span>
+          </span>
+        </div>
+      </a>
+    </div>
+    
+
+    
+    <div class="declare"> 
+      <ul class="post-copyright">
+        <li>
+          <strong>本文作者：</strong>
+          Liguras
+        </li>
+        <li>
+          <strong>本文链接：</strong>
+          <a href="http://www.liguras.cn/2021/01/26/mysql更改默认存储位置/" title="mysql更改默认存储位置" target="_blank">http://www.liguras.cn/2021/01/26/mysql更改默认存储位置/</a>
+        </li>
+        
+        <li>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，均采用 <a href="https://github.com/JoeyBling/hexo-theme-yilia-plus/blob/master/LICENSE" rel="external nofollow" target="_blank">MIT</a> 许可协议。转载请注明出处！
+        </li>
+        
+      </ul>
+    </div>
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+
+    
+    
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <!-- <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a> -->
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=http://www.liguras.cn/2021/01/26/mysql%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/" alt="微信分享二维码"> -->
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+
+<nav id="article-nav">
+  
+    <a href="/2021/01/26/Centos%207%20%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E6%9C%8D%E5%8A%A1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Centos 7 开机自启服务
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/01/26/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">数据库事务隔离级别</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+  
+  <div id="gitment-ctn"></div>
+  
+    <!-- 中文 -->
+    <link rel="stylesheet" href="/lib/gitment.css">
+    <script src="/lib/gitment.js"></script>
+  
+  <script>
+    <!-- id: "mysql更改默认存储位置" -->
+    var gitment = new Gitment({
+      id: "20210126201403",
+      owner: 'liguras',
+      repo: 'liguras.github.io',
+      oauth: {
+        client_id: 'a973b72834a3ce7596fa',
+        client_secret: '94254df5473f53170f521c02e765f32bf6d9fc04',
+      },
+    })
+    gitment.render('gitment-ctn')
+  </script>
+
+
+  
+
 
 
           </div>
@@ -303,8 +499,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,

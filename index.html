@@ -207,7 +207,7 @@
             
 
   
-    <article id="post-Linux备份mysql" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-CAP" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -215,7 +215,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" target="_blank">Linux备份mysql</a>
+	  <a class="article-title" href="/2021/01/26/CAP/" target="_blank">CAP</a>
   
     </h1>
   
@@ -223,8 +223,8 @@
 
   
   
-<a href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" class="archive-article-date">
-        <time datetime="2020-07-04T11:46:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-04</time>
+<a href="/2021/01/26/CAP/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.976Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
 </a>
 
   
@@ -236,49 +236,13 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="Mysql备份"><a href="#Mysql备份" class="headerlink" title="Mysql备份"></a>Mysql备份</h1><h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>在日常运维工作中，对mysql数据库的备份是万分重要的，以防在数据库表丢失或损坏情况出现，可以及时恢复数据。备份可根据实际情况进行全量、增量备份</p>
-<h3 id="全量备份"><a href="#全量备份" class="headerlink" title="全量备份"></a>全量备份</h3><p>​        顾名思义，备份数据库目前已有的全部数据。</p>
-<h3 id="增量备份"><a href="#增量备份" class="headerlink" title="增量备份"></a>增量备份</h3><p>​        增量备份是指在一次全备份或上一次增量备份后，以后每次的备份只需备份与前一次相比增加或者被修改的文件。这就意味着，第一次增量备份的对象是进行全备后所产生的增加和修改的文件；第二次增量备份的对象是进行第一次增量备份后所产生的增加和修改的文件，如此类推。这种备份方式最显著的优点就是：没有重复的备份数据，因此备份的数据量不大，备份所需的时间很短。但增量备份的数据恢复是比较麻烦的。您必须具有上一次全备份和所有增量备份磁带（一旦丢失或损坏其中的一个增量，就会造成恢复的失败），并且它们必须沿着从全备份到依次增量备份的时间顺序逐个反推恢复，因此这就极大地延长了恢复时间。</p>
-<p>​        假如我们有一个数据库，有100G的数据，每天会增加20M的数据，数据库每天都要全量备份一次，这样的话服务器的压力比较大，因此我们只需要备份增加的这部分数据，这样减少服务器的负担。</p>
-<h3 id="binlog（增量备份要开启）"><a href="#binlog（增量备份要开启）" class="headerlink" title="binlog（增量备份要开启）"></a>binlog（增量备份要开启）</h3><p>​        binlog日志由配置文件的log-bin选项负责启用，Mysql服务器将在数据根目录创建两个新文 件XXX-bin.001和xxx-bin.index，若配置选项没有给出文件名，Mysql将使用主机名称命名这两个文件，其中.index文件包含一份全体日志文件的清单。  Mysql会把用户对所有数据库的内容和结构的修改情况记入XXX-bin.n文件，而不会记录 SELECT和没有实际更新的UPDATE语句。<br>​        当MySQL数据库停止或重启时，服务器会把日志文件记入下一个日志文件，Mysql会在重启时生成一个新的binlog日志文件，文件序号递增，此外，如果日志文件超过max_binlog_size系统变量配置的上限时，也会生成新的日志文件。</p>
-<h3 id="备份场景"><a href="#备份场景" class="headerlink" title="备份场景"></a>备份场景</h3><p>​        数据量大：每周1、2次全量备份，每天一次增量备份</p>
-<p>​        数据量小：每天一次全量备份</p>
-<h2 id="二、备份"><a href="#二、备份" class="headerlink" title="二、备份"></a>二、备份</h2><h3 id="1-备份前"><a href="#1-备份前" class="headerlink" title="1.备份前"></a>1.备份前</h3><p>1、开启binlog日志</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1、编辑mysql配置文件</span></span><br><span class="line">vi /etc/my.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 在文件末尾然后添加下面的代码</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 若log_bin后面不指定路径，则默认存储在mysql的data目录下,也就是/var/lib/mysql</span></span><br><span class="line">log-bin=mysql-bin</span><br><span class="line"><span class="meta">#</span><span class="bash"> 保存退出</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2、查看binlog开启情况</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入mysql</span></span><br><span class="line">mysql -uroot -p</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查询</span></span><br><span class="line"><span class="meta">mysql&gt;</span><span class="bash"> show variables like <span class="string">'log_bin%'</span>;</span></span><br><span class="line">+---------------------------------+--------------------------------+</span><br><span class="line">| Variable_name                   | Value                          |</span><br><span class="line">+---------------------------------+--------------------------------+</span><br><span class="line">| log_bin                         | ON                             |</span><br><span class="line">| log_bin_basename                | /var/lib/mysql/mysql-bin       |</span><br><span class="line">| log_bin_index                   | /var/lib/mysql/mysql-bin.index |</span><br><span class="line">| log_bin_trust_function_creators | OFF                            |</span><br><span class="line">| log_bin_use_v1_row_events       | OFF                            |</span><br><span class="line">+---------------------------------+--------------------------------+</span><br><span class="line">5 rows in set (0.00 sec)</span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以看到log_bin已经ON了，代表开启了</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="http://qcx88euju.bkt.clouddn.com/my.png" alt="my"></p>
-<h3 id="2-开始备份：全量备份"><a href="#2-开始备份：全量备份" class="headerlink" title="2.开始备份：全量备份"></a>2.开始备份：全量备份</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 全量备份命令</span></span><br><span class="line">mysqldump --single-transaction --flush-logs --master-data=2 -uroot -p密码  数据库名 &gt; xxx.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 举例</span></span><br><span class="line">mysqldump --single-transaction --flush-logs --master-data=2 -uroot -p123456 test &gt; backup.sql</span><br></pre></td></tr></table></figure>
-
-<h4 id="参数介绍："><a href="#参数介绍：" class="headerlink" title="参数介绍："></a>参数介绍：</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--single-transaction: 利用事务的一致性，保证备份过程中的数据一致性。</span><br><span class="line"><span class="meta">#</span><span class="bash"> 注意：--single-transaction 只是针对Innodb引擎，如果是Myisam引擎则要用 --lock-all-tables</span></span><br><span class="line">--flush-logs： 开始备份之前刷新mysql服务器日志文件</span><br><span class="line">--master-data=2:  将二进制日志文件的名称和位置备份</span><br><span class="line">三个参数一起使用能达到将锁定时间大大减少的目的</span><br></pre></td></tr></table></figure>
-
-<h4 id="shell脚本-定时跑该脚本，定时备份"><a href="#shell脚本-定时跑该脚本，定时备份" class="headerlink" title="shell脚本(定时跑该脚本，定时备份)"></a>shell脚本(定时跑该脚本，定时备份)</h4><p>目录结构：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@test-houtai mysql]# pwd</span><br><span class="line">/usr/local/mysql</span><br><span class="line">[root@test-houtai mysql]# ls</span><br><span class="line">backup  daily  fullback.sh  inback.sh  log</span><br><span class="line"><span class="meta">#</span><span class="bash"> 目录介绍，以下目录及文件的名称及存放位置可自行修改，只要shell脚本里对应好就行</span></span><br><span class="line">--backup:全量备份存储的目录</span><br><span class="line">--daily：增量日志存储的没有了</span><br><span class="line">--fullback.sh: 全量备份的shell脚本</span><br><span class="line">--inback.sh：增量备份的shell脚本</span><br><span class="line">--log： 备份日志</span><br><span class="line"></span><br><span class="line">[root@test-houtai log]# ls</span><br><span class="line">back.log  dbBack.log</span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">log</span>目录下还有两个文件，分别是back.log:增量备份的日志，dbBack.log:全量备份的日志</span></span><br></pre></td></tr></table></figure>
-
-<p>shell脚本：fullback.sh</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 以下涉及到的路径可自行配置，需要先创建好目录</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> fullback.sh</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash">获取当前时间</span></span><br><span class="line">date_now=$(date "+%Y%m%d-%H%M%S")</span><br><span class="line">backUpFolder=/usr/local/mysql/backup</span><br><span class="line">username="root"</span><br><span class="line">password="Voxtech@2020"</span><br><span class="line"><span class="meta">#</span><span class="bash"> 需要备份的库</span></span><br><span class="line">db_name="vox_system"</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash">全量备份日志</span></span><br><span class="line">logFile=/usr/local/mysql/log/dbBack.log</span><br><span class="line"><span class="meta">#</span><span class="bash">定义备份文件名</span></span><br><span class="line">fileName="$&#123;db_name&#125;_$&#123;date_now&#125;.sql"</span><br><span class="line"><span class="meta">#</span><span class="bash">定义备份文件目录</span></span><br><span class="line">backUpFileName="$&#123;backUpFolder&#125;/$&#123;fileName&#125;"</span><br><span class="line"><span class="meta">#</span><span class="bash">备份前先清空binlog</span></span><br><span class="line">mysql -uroot -pVoxtech@2020 -e "RESET MASTER;"：</span><br><span class="line">echo "starting backup mysql $&#123;db_name&#125; at $&#123;date_now&#125;." &gt;&gt; $logFile</span><br><span class="line"><span class="meta">#</span><span class="bash"> 备份</span></span><br><span class="line">mysqldump -u$&#123;username&#125; -p$&#123;password&#125;  --single-transaction --flush-logs $&#123;db_name&#125; &gt; $&#123;backUpFileName&#125;</span><br><span class="line"><span class="meta">#</span><span class="bash">进入到备份文件目录</span></span><br><span class="line">cd $&#123;backUpFolder&#125;</span><br><span class="line"><span class="meta">#</span><span class="bash">压缩备份文件</span></span><br><span class="line">tar -zcvf $&#123;fileName&#125;.tar.gz $&#123;fileName&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 备份结束日期</span></span><br><span class="line">date_end=$(date "+%Y%m%d-%H%M%S")</span><br><span class="line">echo "finish backup mysql database $&#123;db_name&#125; at $&#123;date_end&#125;." &gt;&gt; $logFile</span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除sql文件，不删也可以，建议保留一段时间内的备份</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> rm -f <span class="variable">$&#123;fileName&#125;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 全量备份完后删除前一个星期的增量备份</span></span><br><span class="line">rm -rf /usr/local/mysql/daily/*</span><br></pre></td></tr></table></figure>
+    <h1 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h1><h2 id="一、一致性（Consistency）"><a href="#一、一致性（Consistency）" class="headerlink" title="一、一致性（Consistency）"></a>一、一致性（Consistency）</h2><p>更新操作成功并返回客户端完成后，所有节点在同一时间的数据完全一致，所以，一致性，说的就是数据一致性</p>
+<h3 id="三种一致性"><a href="#三种一致性" class="headerlink" title="三种一致性"></a>三种一致性</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">对于关系型数据库，要求更新过的数据能被后续的访问都能看到，这是强一致性。</span><br><span class="line"></span><br><span class="line">如果能容忍后续的部分或者全部访问不到，则是弱一致性。</span><br><span class="line"></span><br><span class="line">如果经过一段时间后要求能访问到更新后的数据，则是最终一致性。</span><br><span class="line"></span><br><span class="line">CAP中说，不可能同时满足的这个一致性指的是强一致性。</span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="3-开始备份：增量备份"><a href="#3-开始备份：增量备份" class="headerlink" title="3.开始备份：增量备份"></a>3.开始备份：增量备份</h3><p>增量备份只是将mysql产生的binlog日志提取出来，没有专门的备份命令，只需要将文件复制到你想要存储的位置就行</p>
-<h4 id="shell脚本（为了定时任务跑，定时备份增量数据）"><a href="#shell脚本（为了定时任务跑，定时备份增量数据）" class="headerlink" title="shell脚本（为了定时任务跑，定时备份增量数据）"></a>shell脚本（为了定时任务跑，定时备份增量数据）</h4><p>inback.sh</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> inback.sh</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line"><span class="meta">#</span><span class="bash">在使用之前，请提前创建以下各个目录</span></span><br><span class="line"><span class="meta">#</span><span class="bash">增量备份时复制mysql-bin.00000*的目标目录，提前手动创建这个目录</span></span><br><span class="line">backupDir=/usr/local/mysql/daily</span><br><span class="line"><span class="meta">#</span><span class="bash">mysql的数据目录</span></span><br><span class="line">mysqlDir=/var/lib/mysql</span><br><span class="line"><span class="meta">#</span><span class="bash">mysql的index文件路径，放在数据目录下的</span></span><br><span class="line">logFile=/usr/local/mysql/log/back.log</span><br><span class="line">BinFile=/var/lib/mysql/mysql-bin.index</span><br><span class="line"><span class="meta">#</span><span class="bash">这个是用于产生新的mysql-bin.00000*文件</span></span><br><span class="line">mysqladmin -uroot -pVoxtech@2020 flush-logs</span><br><span class="line"><span class="meta">#</span><span class="bash"> wc -l 统计行数</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> awk 简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。</span></span><br><span class="line">Counter=`wc -l $BinFile |awk '&#123;print $1&#125;'`</span><br><span class="line">NextNum=0</span><br><span class="line"><span class="meta">#</span><span class="bash">这个<span class="keyword">for</span>循环用于比对<span class="variable">$Counter</span>,<span class="variable">$NextNum</span>这两个值来确定文件是不是存在或最新的</span></span><br><span class="line">for file in `cat $BinFile`</span><br><span class="line">do</span><br><span class="line">    base=`basename $file`</span><br><span class="line">    echo $base</span><br><span class="line">    #basename用于截取mysql-bin.00000*文件名，去掉./mysql-bin.000005前面的./</span><br><span class="line">    NextNum=`expr $NextNum + 1`</span><br><span class="line">    if [ $NextNum -eq $Counter ]</span><br><span class="line">    then</span><br><span class="line">        echo $base skip! &gt;&gt; $logFile</span><br><span class="line">    else</span><br><span class="line">        dest=$backupDir/$base</span><br><span class="line">        if(test -e $dest)</span><br><span class="line">        #test -e用于检测目标文件是否存在，存在就写exist!到$logFile去</span><br><span class="line">        then</span><br><span class="line">            echo $base exist! &gt;&gt; $logFile</span><br><span class="line">        else</span><br><span class="line">            cp $mysqlDir/$base $backupDir</span><br><span class="line">            echo $base copying &gt;&gt; $logFile</span><br><span class="line">         fi</span><br><span class="line">     fi</span><br><span class="line">done</span><br><span class="line">echo `date +"%Y年%m月%d日 %H:%M:%S"` $Next Bakup succ! &gt;&gt; $logFile</span><br></pre></td></tr></table></figure>
-
-<h3 id="4、测试"><a href="#4、测试" class="headerlink" title="4、测试"></a>4、测试</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入备份目录</span></span><br><span class="line">cd /usr/local/mysql</span><br><span class="line">[root@test-houtai mysql]# pwd</span><br><span class="line">/usr/local/mysql</span><br><span class="line">[root@test-houtai mysql]# ls</span><br><span class="line">backup  daily  fullback.sh  inback.sh  log</span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以看到fullback.sh、inback.sh两个脚本</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 先运行全量备份的脚本</span></span><br><span class="line">[root@test-houtai mysql]# ./fullback.sh </span><br><span class="line">mysqldump: [Warning] Using a password on the command line interface can be insecure. # 这个警告是在shell脚本直接把mysql密码明文显示登录</span><br><span class="line">vox_system_20200704-104356.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 这时可以进backup目录查看备份的文件，可以看到备份好的sql文件和压缩好的sql文件</span></span><br><span class="line">[root@test-houtai mysql]# cd backup/</span><br><span class="line">[root@test-houtai backup]# ls</span><br><span class="line">vox_system_20200704-104356.sql    vox_system_20200704-104356.sql.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 接着可以对数据库做一些插入删除操作，然后可以开始做增量备份，运行inback.sh脚本</span></span><br><span class="line">[root@test-houtai mysql]# ./inback.sh </span><br><span class="line">mysqladmin: [Warning] Using a password on the command line interface can be insecure. # 同上</span><br><span class="line">mysql-bin.000001</span><br><span class="line">mysql-bin.000002</span><br><span class="line"><span class="meta">#</span><span class="bash"> 进daily目录查看增量备份的日志</span></span><br><span class="line">[root@test-houtai mysql]# cd daily/</span><br><span class="line">[root@test-houtai daily]# ls</span><br><span class="line">mysql-bin.000001</span><br><span class="line"><span class="meta">#</span><span class="bash"> 这里说明一下，inback.sh脚本里刷新日志的命令，会产生一个新的日志文件，然后脚本不会把新的日志文件复制到daily文件夹里</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 这时备份好的文件可以测试还原了，还原步骤在下面</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="三、还原"><a href="#三、还原" class="headerlink" title="三、还原"></a>三、还原</h2><h3 id="1-全量备份还原"><a href="#1-全量备份还原" class="headerlink" title="1. 全量备份还原"></a>1. 全量备份还原</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 还原全量备份</span></span><br><span class="line">mysql -hmysql主机  -u登录名 -p密码 需要还原的数据库 &lt; 备份好的sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 举例</span></span><br><span class="line">mysql -h172.10.10.179  -uroot -pVoxtech@2020 vox_system &lt; vox_system_20200704-104356.sql</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-增量备份还原"><a href="#2-增量备份还原" class="headerlink" title="2. 增量备份还原"></a>2. 增量备份还原</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1、先将日志转化为sql文件</span></span><br><span class="line">mysqlbinlog -d 数据库名 mysql-bin.xxxx &gt; xx.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 举例</span></span></span><br><span class="line">mysqlbinlog -d vox_system mysql-bin.000001 &gt; vox_system.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 2、运行sql还原</span></span><br><span class="line">mysql -u登录名 -p密码  数据库名 &lt; 刚刚转化好的sql文件</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 举例</span></span></span><br><span class="line">mysql -uroot -pVoxtech@2020  vox_system &lt; vox_system.sql</span><br></pre></td></tr></table></figure>
-
-<h2 id="四、定时跑脚本备份"><a href="#四、定时跑脚本备份" class="headerlink" title="四、定时跑脚本备份"></a>四、定时跑脚本备份</h2><h3 id="1、定时任务命令"><a href="#1、定时任务命令" class="headerlink" title="1、定时任务命令"></a>1、定时任务命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> linux自带定时任务</span></span><br><span class="line">crontab -e ：新建一个定时任务</span><br><span class="line">crontab -l ：查看已创建的定时任务</span><br><span class="line">crontab -r ：删除已有的定时任务</span><br></pre></td></tr></table></figure>
-
-<h3 id="2、创建定时任务跑脚本"><a href="#2、创建定时任务跑脚本" class="headerlink" title="2、创建定时任务跑脚本"></a>2、创建定时任务跑脚本</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 每天凌晨2点全量备份一次，cron表达式这里就不过多解释</span></span><br><span class="line">0 2 * * * /bin/bash -x /usr/local/mysql/fullback.sh &gt;/dev/null 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> /dev/null 2&gt;&amp;1 命令解释</span></span><br><span class="line">/dev/null:表示Linux的空设备文件，输出重定向到黑洞，即输出内容不打印到屏幕上</span><br><span class="line">0 —— stdin（标准输入）</span><br><span class="line">1 —— stdout （标准输出）</span><br><span class="line">2 —— stderr （标准错误）</span><br><span class="line"><span class="meta">2&gt;</span><span class="bash">&amp;1: 将标准输出等同于错误输出 输出出来</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="五、其他"><a href="#五、其他" class="headerlink" title="五、其他"></a>五、其他</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 备份MySQL数据库某个(些)表</span></span><br><span class="line">mysqldump -hhostname -uusername -ppassword databasename table1 table2 &gt; backupfile.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 同时备份多个MySQL数据库</span></span><br><span class="line">mysqldump -hhostname -uusername -ppassword –databases database1 database2 database3 &gt; multibackupfile.sql</span><br><span class="line"><span class="meta">#</span><span class="bash"> 将数据库转移到新服务器</span></span><br><span class="line">mysqldump -uusername -ppassword databasename | mysql –host=*.*.*.* -C databasename</span><br></pre></td></tr></table></figure>
-
-
-
-
-
+<h2 id="二、可用性（Availability）"><a href="#二、可用性（Availability）" class="headerlink" title="二、可用性（Availability）"></a>二、可用性（<strong>Availability</strong>）</h2><p>服务一直可用，而且是正常响应时间</p>
+<h2 id="三、分区容错性（Partition-Tolerance）"><a href="#三、分区容错性（Partition-Tolerance）" class="headerlink" title="三、分区容错性（Partition Tolerance）"></a>三、分区容错性（Partition Tolerance）</h2><p>分布式系统在遇到某节点或网络分区故障的时候，仍然能够对外提供满足一致性和可用性的服务</p>
 
     
 
@@ -290,26 +254,11 @@
   <div class="article-info article-info-index">
     
     
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
     
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/">展开全文 >></a>
+      <a class="article-more-a" href="/2021/01/26/CAP/">展开全文 >></a>
     </p>
     
 
@@ -339,7 +288,7 @@
 
 
   
-    <article id="post-Linux安装java" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Nginx、Redis、Tomcat-linux命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -347,7 +296,7 @@
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2020/06/27/Linux%E5%AE%89%E8%A3%85java/" target="_blank">Linux安装java</a>
+	  <a class="article-title" href="/2021/01/26/Nginx%E3%80%81Redis%E3%80%81Tomcat-linux%E5%91%BD%E4%BB%A4/" target="_blank">Nginx、Redis、Tomcat-linux命令</a>
   
     </h1>
   
@@ -355,8 +304,8 @@
 
   
   
-<a href="/2020/06/27/Linux%E5%AE%89%E8%A3%85java/" class="archive-article-date">
-        <time datetime="2020-06-27T03:08:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-27</time>
+<a href="/2021/01/26/Nginx%E3%80%81Redis%E3%80%81Tomcat-linux%E5%91%BD%E4%BB%A4/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.966Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
 </a>
 
   
@@ -368,71 +317,48 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="Linux安装java"><a href="#Linux安装java" class="headerlink" title="Linux安装java"></a>Linux安装java</h1><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><h3 id="Linux系统"><a href="#Linux系统" class="headerlink" title="Linux系统"></a>Linux系统</h3><p>centos7</p>
-<h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><p>JDK1.8</p>
-<p><a href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html#license-lightbox" target="_blank" rel="noopener">jdk-8u251-linux-x64.tar.gz</a></p>
-<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><h4 id="1、安装前检查系统是否已安装jdk"><a href="#1、安装前检查系统是否已安装jdk" class="headerlink" title="1、安装前检查系统是否已安装jdk"></a>1、安装前检查系统是否已安装jdk</h4><pre><code>java -verson</code></pre><p>如果未安装则会显示</p>
-<pre><code>-bash: java: 未找到命令</code></pre><p>已安装则会显示对应的版本信息</p>
-<pre><code>[root@test-houtaimyql voxtech]# java -version
-java version &quot;1.8.0_221&quot;
-Java(TM) SE Runtime Environment (build 1.8.0_221-b11)
-Java HotSpot(TM) 64-Bit Server VM (build 25.221-b11, mixed mode)</code></pre><p>如果需要更换jdk，下面会有介绍</p>
-<h4 id="2、开始安装"><a href="#2、开始安装" class="headerlink" title="2、开始安装"></a>2、开始安装</h4><ol>
-<li><p>下载好的jdk上传到服务器（上传下载可用rz、sz命令）</p>
-<p>rz、sz需要下载</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install lrzsz</span><br></pre></td></tr></table></figure>
-
-<p>然后就可以开始上传jdk了</p>
-</li>
+    <h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><h2 id="Nginx启动、停止、重启"><a href="#Nginx启动、停止、重启" class="headerlink" title="Nginx启动、停止、重启"></a>Nginx启动、停止、重启</h2><h3 id="1-启动"><a href="#1-启动" class="headerlink" title="1. 启动"></a>1. 启动</h3><p>切换到/usr/local/ngnix/sbin目录下，然后执行下面命令：</p>
+<pre><code>./nginx</code></pre><h3 id="2-停止-强制停止"><a href="#2-停止-强制停止" class="headerlink" title="2. 停止(强制停止)"></a>2. 停止(强制停止)</h3><p>切换到/usr/local/ngnix/sbin目录下，然后执行下面命令：</p>
+<pre><code>./nginx -s stop</code></pre><h3 id="3-停止（退出停止，等待nginx进程处理完任务再进行停止）"><a href="#3-停止（退出停止，等待nginx进程处理完任务再进行停止）" class="headerlink" title="3. 停止（退出停止，等待nginx进程处理完任务再进行停止）"></a>3. 停止（退出停止，等待nginx进程处理完任务再进行停止）</h3><p>切换到/usr/local/ngnix/sbin目录下，然后执行下面命令：</p>
+<pre><code>./nginx -s quit</code></pre><h3 id="4-重启，reload命令会重新加载配置文件，nginx服务不会中断。"><a href="#4-重启，reload命令会重新加载配置文件，nginx服务不会中断。" class="headerlink" title="4. 重启，reload命令会重新加载配置文件，nginx服务不会中断。"></a>4. 重启，reload命令会重新加载配置文件，nginx服务不会中断。</h3><p>切换到/usr/local/ngnix/sbin目录下，然后执行下面命令：</p>
+<pre><code>./nginx -s reload</code></pre><h3 id="5-查看nginx是否启动"><a href="#5-查看nginx是否启动" class="headerlink" title="5. 查看nginx是否启动"></a>5. 查看nginx是否启动</h3><pre><code>ps aux|grep nginx</code></pre><h2 id="修改config文件"><a href="#修改config文件" class="headerlink" title="修改config文件"></a>修改config文件</h2><ol>
+<li><p>切换到/usr/local/nginx目录</p>
+<pre><code>cd /usr/local/nginx</code></pre></li>
+<li><p>修改config配置文件</p>
+<pre><code>vi conf/nginx.conf</code></pre></li>
+<li><p>重新加载Nginx</p>
+<pre><code>./sbin/nginx -s reload</code></pre></li>
 </ol>
-<ul>
-<li><p>切换到上传路径，一般为/usr/local</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local</span><br><span class="line">rz  # 然后选中jdk，等待上传完成</span><br><span class="line">ls  # 查看当前目录,查看jdk是否已存在</span><br></pre></td></tr></table></figure>
+<h1 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h1><h2 id="Tomcat启动、停止"><a href="#Tomcat启动、停止" class="headerlink" title="Tomcat启动、停止"></a>Tomcat启动、停止</h2><p>切换到tomcat安装路径的bin目录下</p>
+<pre><code>cd /usr/local/tomcat/bin</code></pre><h3 id="1-启动-1"><a href="#1-启动-1" class="headerlink" title="1.启动"></a>1.启动</h3><pre><code>./startup.sh</code></pre><h3 id="2-停止"><a href="#2-停止" class="headerlink" title="2.停止"></a>2.停止</h3><pre><code>./stutdown.sh</code></pre><h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h2 id="Redis启动、停止"><a href="#Redis启动、停止" class="headerlink" title="Redis启动、停止"></a>Redis启动、停止</h2><h3 id="1-启动-2"><a href="#1-启动-2" class="headerlink" title="1.启动"></a>1.启动</h3><p>进入redis安装目录的bin目录</p>
+<pre><code>cd /usr/local/redis/bin</code></pre><ul>
+<li><p>直接启动,Ctrl + C后会停止</p>
+<pre><code>./redis-server</code></pre></li>
+<li><p>后台启动，使用默认配置</p>
+<pre><code>./redis-server &amp;</code></pre></li>
+<li><p>修改配置文件，后台启动(推荐)</p>
+<pre><code>1、复制redis目录下的redis.conf文件到bin目录下
+cp /usr/local/redis/redis.conf /usr/local/redis/bin/
+2、修改bin下面的redis.conf
+vi bin/redis.conf
+3、找到daemonize no改为yes
+注：快速查找字符串shell  :/daemo</code></pre><p>  2、</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./redis-server redis.conf</span><br></pre></td></tr></table></figure>
+
+
+
 
 </li>
 </ul>
-<ol start="2">
-<li><p>解压</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf jdk-8u251-linux-x64.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 解压完后，文件夹名为:	jdk1.8.0_251</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重命名</p>
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv jdk1.8.0_251 java</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改配置文件</p>
-<p>vi /etc/profile</p>
-</li>
-<li><p>在配置文件最后面加上下面代码</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/local/java</span><br><span class="line">export PATH=$PATH:$JAVA_HOME/bin</span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">export JRE_HOME=$JAVA_HOME/jre</span><br></pre></td></tr></table></figure>
+<pre><code>![daemonize](http://i2.tiimg.com/721925/1fe54b453ac2fcff.png)</code></pre><h1 id="Mysql"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</h1><h3 id="1、查看mysql服务状态"><a href="#1、查看mysql服务状态" class="headerlink" title="1、查看mysql服务状态"></a>1、查看mysql服务状态</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld status</span><br></pre></td></tr></table></figure>
 
-<p>然后保存退出</p>
-<p>如图：</p>
-<p><img src="http://i2.tiimg.com/721925/3ff5b8e048087392.png" alt="jdk配置"></p>
-</li>
-<li><p>让配置文件生效</p>
-<p>source /etc/profile</p>
-</li>
-<li><p>查看是否安装成功</p>
-<p>java -version</p>
-</li>
-</ol>
-<h2 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h2><h3 id="1、将安装包删除"><a href="#1、将安装包删除" class="headerlink" title="1、将安装包删除"></a>1、将安装包删除</h3><pre><code>rm -rf /usr/local/java</code></pre><h3 id="2、修改配置文件"><a href="#2、修改配置文件" class="headerlink" title="2、修改配置文件"></a>2、修改配置文件</h3><pre><code>将原来配置的代码删除即可，保存，然后重新生效</code></pre><h1 id="删除Openjdk"><a href="#删除Openjdk" class="headerlink" title="删除Openjdk"></a>删除Openjdk</h1><p>如果系统自带OpenJDK，但是版本不是你想要的，或者想换成oracle的JDK，这时就可以更换了</p>
-<h2 id="1、查找安装位置"><a href="#1、查找安装位置" class="headerlink" title="1、查找安装位置"></a>1、查找安装位置</h2><pre><code>[root@java-test-01 ~]# rpm -qa | grep java
-java-1.8.0-openjdk-headless-1.8.0.101-3.b13.el7_2.x86_64
-tzdata-java-2016f-1.el7.noarch
-java-1.8.0-openjdk-1.8.0.101-3.b13.el7_2.x86_64
-javapackages-tools-3.4.1-11.el7.noarch
-java-1.7.0-openjdk-headless-1.7.0.111-2.6.7.2.el7_2.x86_64
-java-1.7.0-openjdk-1.7.0.111-2.6.7.2.el7_2.x86_64
-python-javapackages-3.4.1-11.el7.noarch</code></pre><h2 id="2、删除全部，noarch文件可以不用删除"><a href="#2、删除全部，noarch文件可以不用删除" class="headerlink" title="2、删除全部，noarch文件可以不用删除"></a>2、删除全部，noarch文件可以不用删除</h2><pre><code>[root@java-test-01 ~]# rpm -e --nodeps java-1.8.0-openjdk-headless-1.8.0.101-3.b13.el7_2.x86_64
-[root@java-test-01 ~]# rpm -e --nodeps java-1.8.0-openjdk-1.8.0.101-3.b13.el7_2.x86_64
-[root@java-test-01 ~]# rpm -e --nodeps java-1.7.0-openjdk-headless-1.7.0.111-2.6.7.2.el7_2.x86_64
-[root@java-test-01 ~]# rpm -e --nodeps java-1.7.0-openjdk-1.7.0.111-2.6.7.2.el7_2.x86_64
+<h3 id="2、启动mysql"><a href="#2、启动mysql" class="headerlink" title="2、启动mysql"></a>2、启动mysql</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld start</span><br></pre></td></tr></table></figure>
 
-# 查看jdk是否删除完
-java -version
+<h3 id="3、停止mysql"><a href="#3、停止mysql" class="headerlink" title="3、停止mysql"></a>3、停止mysql</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld stop</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、重启mysql"><a href="#4、重启mysql" class="headerlink" title="4、重启mysql"></a>4、重启mysql</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service mysqld restart</span><br></pre></td></tr></table></figure>
 
 
-如果还没有删除，则用yum -y remove去删除他们</code></pre>
     
 
     
@@ -443,26 +369,11 @@ java -version
   <div class="article-info article-info-index">
     
     
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
     
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2020/06/27/Linux%E5%AE%89%E8%A3%85java/">展开全文 >></a>
+      <a class="article-more-a" href="/2021/01/26/Nginx%E3%80%81Redis%E3%80%81Tomcat-linux%E5%91%BD%E4%BB%A4/">展开全文 >></a>
     </p>
     
 
@@ -492,7 +403,7 @@ java -version
 
 
   
-    <article id="post-Linux安装mysql8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Linux安装Nginx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -500,7 +411,7 @@ java -version
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2020/06/27/Linux%E5%AE%89%E8%A3%85mysql8/" target="_blank">Linux安装mysql8.0</a>
+	  <a class="article-title" href="/2021/01/26/Linux%E5%AE%89%E8%A3%85Nginx/" target="_blank">Linux安装Nginx</a>
   
     </h1>
   
@@ -508,8 +419,86 @@ java -version
 
   
   
-<a href="/2020/06/27/Linux%E5%AE%89%E8%A3%85mysql8/" class="archive-article-date">
-        <time datetime="2020-06-27T03:06:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-27</time>
+<a href="/2021/01/26/Linux%E5%AE%89%E8%A3%85Nginx/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.936Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="Linux安装nginx"><a href="#Linux安装nginx" class="headerlink" title="Linux安装nginx"></a>Linux安装nginx</h1><h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="1、环境"><a href="#1、环境" class="headerlink" title="1、环境"></a>1、环境</h3><ul>
+<li>linux：centos7</li>
+<li>nginx：</li>
+</ul>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2021/01/26/Linux%E5%AE%89%E8%A3%85Nginx/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Linux安装mysql" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2021/01/26/Linux%E5%AE%89%E8%A3%85mysql/" target="_blank">Linux安装mysql</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2021/01/26/Linux%E5%AE%89%E8%A3%85mysql/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.926Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
 </a>
 
   
@@ -584,26 +573,11 @@ java -version
   <div class="article-info article-info-index">
     
     
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">mysql8</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
     
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2020/06/27/Linux%E5%AE%89%E8%A3%85mysql8/">展开全文 >></a>
+      <a class="article-more-a" href="/2021/01/26/Linux%E5%AE%89%E8%A3%85mysql/">展开全文 >></a>
     </p>
     
 
@@ -633,7 +607,7 @@ java -version
 
 
   
-    <article id="post-Linux各软件常用命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Java8之Stream" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -641,7 +615,7 @@ java -version
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2020/06/27/Linux%E5%90%84%E8%BD%AF%E4%BB%B6%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" target="_blank">Linux各软件常用命令</a>
+	  <a class="article-title" href="/2021/01/26/Java8%E4%B9%8BStream/" target="_blank">Java8之Stream</a>
   
     </h1>
   
@@ -649,8 +623,8 @@ java -version
 
   
   
-<a href="/2020/06/27/Linux%E5%90%84%E8%BD%AF%E4%BB%B6%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" class="archive-article-date">
-        <time datetime="2020-06-27T03:03:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-27</time>
+<a href="/2021/01/26/Java8%E4%B9%8BStream/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.896Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
 </a>
 
   
@@ -662,57 +636,158 @@ java -version
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><h2 id="Nginx启动、停止、重启"><a href="#Nginx启动、停止、重启" class="headerlink" title="Nginx启动、停止、重启"></a>Nginx启动、停止、重启</h2><h3 id="1-启动"><a href="#1-启动" class="headerlink" title="1. 启动"></a>1. 启动</h3><p>切换到/usr/local/ngnix/sbin目录下，然后执行下面命令：</p>
-<pre><code>./nginx</code></pre><h3 id="2-停止-强制停止"><a href="#2-停止-强制停止" class="headerlink" title="2. 停止(强制停止)"></a>2. 停止(强制停止)</h3><p>切换到/usr/local/ngnix/sbin目录下，然后执行下面命令：</p>
-<pre><code>./nginx -s stop</code></pre><h3 id="3-停止（退出停止，等待nginx进程处理完任务再进行停止）"><a href="#3-停止（退出停止，等待nginx进程处理完任务再进行停止）" class="headerlink" title="3. 停止（退出停止，等待nginx进程处理完任务再进行停止）"></a>3. 停止（退出停止，等待nginx进程处理完任务再进行停止）</h3><p>切换到/usr/local/ngnix/sbin目录下，然后执行下面命令：</p>
-<pre><code>./nginx -s quit</code></pre><h3 id="4-重启，reload命令会重新加载配置文件，nginx服务不会中断。"><a href="#4-重启，reload命令会重新加载配置文件，nginx服务不会中断。" class="headerlink" title="4. 重启，reload命令会重新加载配置文件，nginx服务不会中断。"></a>4. 重启，reload命令会重新加载配置文件，nginx服务不会中断。</h3><p>切换到/usr/local/ngnix/sbin目录下，然后执行下面命令：</p>
-<pre><code>./nginx -s reload</code></pre><h3 id="5-查看nginx是否启动"><a href="#5-查看nginx是否启动" class="headerlink" title="5. 查看nginx是否启动"></a>5. 查看nginx是否启动</h3><pre><code>ps aux|grep nginx</code></pre><h2 id="修改config文件"><a href="#修改config文件" class="headerlink" title="修改config文件"></a>修改config文件</h2><ol>
-<li><p>切换到/usr/local/nginx目录</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>修改config配置文件</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi conf/nginx.conf</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重新加载Nginx</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./sbin/nginx -s reload</span><br></pre></td></tr></table></figure>
+    <h1 id="Java8之Stream-一"><a href="#Java8之Stream-一" class="headerlink" title="Java8之Stream(一)"></a>Java8之Stream(一)</h1><h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>Java 8 API添加了一个新的抽象称为流Stream，可以让你以一种声明的方式处理数据。</p>
+<p>什么是声明式（函数式）编程，什么是命令式编程？</p>
+<h3 id="什么是流"><a href="#什么是流" class="headerlink" title="什么是流"></a>什么是流</h3><p>Stream（流）是一个来自数据源的元素队列并支持聚合操作。</p>
+<p>数据源：可以是可以是集合，数组，I/O channel等</p>
+<p>聚合操作：类似SQL语句一样的操作， 比如filter, map, reduce, find, match, sorted等。</p>
+<h3 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h3><p>1、创建Stream</p>
+<p>2、中间操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一个流可以后面跟随零个或多个中间操作。其目的主要是打开流，做出某种程度的数据映射/过滤，然后返回一个新的流，交给下一个操作使用</span><br></pre></td></tr></table></figure>
+
+<p>3、终止操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一个流只能有一个终止操作，当这个操作执行后，流就被使用“光”了，无法再被操作。所以这必定是流的最后一个操作。Terminal 操作的执行，才会真正开始流的遍历，并且会生成一个结果</span><br></pre></td></tr></table></figure>
 
 
-</li>
-</ol>
-<h1 id="Tomcat"><a href="#Tomcat" class="headerlink" title="Tomcat"></a>Tomcat</h1><h2 id="Tomcat启动、停止"><a href="#Tomcat启动、停止" class="headerlink" title="Tomcat启动、停止"></a>Tomcat启动、停止</h2><p>切换到tomcat安装路径的bin目录下</p>
-<pre><code>cd /usr/local/tomcat/bin</code></pre><h3 id="1-启动-1"><a href="#1-启动-1" class="headerlink" title="1.启动"></a>1.启动</h3><pre><code>./startup.sh</code></pre><h3 id="2-停止"><a href="#2-停止" class="headerlink" title="2.停止"></a>2.停止</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./stutdown.sh</span><br></pre></td></tr></table></figure>
 
-<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h2 id="Redis启动、停止"><a href="#Redis启动、停止" class="headerlink" title="Redis启动、停止"></a>Redis启动、停止</h2><h3 id="1-启动-2"><a href="#1-启动-2" class="headerlink" title="1.启动"></a>1.启动</h3><p>进入redis安装目录的bin目录</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/redis/bin</span><br></pre></td></tr></table></figure>
+<h2 id="二、API使用"><a href="#二、API使用" class="headerlink" title="二、API使用"></a>二、API使用</h2><h3 id="1、创建流Stream"><a href="#1、创建流Stream" class="headerlink" title="1、创建流Stream"></a>1、创建流Stream</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">String [] strArray = <span class="keyword">new</span> String[] &#123;<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>&#125;;</span><br><span class="line"><span class="comment">// 1、Stream.of</span></span><br><span class="line">Stream stream = Stream.of(strArray);</span><br><span class="line"><span class="comment">// 2、Arrays.of</span></span><br><span class="line">stream = Arrays.stream(strArray);</span><br><span class="line"><span class="comment">// 3、Collections</span></span><br><span class="line">List&lt;String&gt; list = Arrays.asList(strArray);</span><br><span class="line"><span class="comment">// 创建串行流</span></span><br><span class="line">stream = list.stream();</span><br><span class="line"><span class="comment">// 创建并行流</span></span><br><span class="line">stream = list.parallelStream();</span><br></pre></td></tr></table></figure>
 
-<ul>
-<li><p>直接启动,Ctrl + C后会停止</p>
-<p>./redis-server</p>
-</li>
-<li><p>后台启动，使用默认配置</p>
-<p>./redis-server &amp;</p>
-</li>
-<li><p>修改配置文件，后台启动(推荐)</p>
-<p>1、复制redis目录下的redis.conf文件到bin目录下</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/local/redis/redis.conf /usr/local/redis/bin/</span><br></pre></td></tr></table></figure>
+<h3 id="2、中间操作-API"><a href="#2、中间操作-API" class="headerlink" title="2、中间操作-API"></a>2、中间操作-API</h3><h4 id="1）、forEach：遍历"><a href="#1）、forEach：遍历" class="headerlink" title="1）、forEach：遍历"></a>1）、forEach：遍历</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 涉及到java 8 两个新语法，一个是方法引用，一个是Lambda表达式</span></span><br><span class="line">list.forEach(System.out::println);</span><br><span class="line">list.forEach( i -&gt; &#123;</span><br><span class="line">    System.out.print(i);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
 
-<p>2、修改bin下面的redis.conf</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi bin/redis.conf</span><br></pre></td></tr></table></figure>
+<h4 id="2-、map：用于映射每个元素到对应的结果"><a href="#2-、map：用于映射每个元素到对应的结果" class="headerlink" title="2)、map：用于映射每个元素到对应的结果"></a>2)、map：用于映射每个元素到对应的结果</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); </span><br><span class="line">List&lt;Integer&gt; resList = list.stream().map( i -&gt; i + <span class="number">1</span>).collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::print);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">23</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-、filter：用于通过设置的条件过滤出元素"><a href="#3-、filter：用于通过设置的条件过滤出元素" class="headerlink" title="3)、filter：用于通过设置的条件过滤出元素"></a>3)、filter：用于通过设置的条件过滤出元素</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); </span><br><span class="line">List&lt;Integer&gt; resList = list.stream().filter( i -&gt; i &gt; <span class="number">1</span>).collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::println);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4）、limit：用于获取指定数量的流"><a href="#4）、limit：用于获取指定数量的流" class="headerlink" title="4）、limit：用于获取指定数量的流"></a>4）、limit：用于获取指定数量的流</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">3</span>); </span><br><span class="line"><span class="comment">// list是有序的，从第一个元素开始算</span></span><br><span class="line">List&lt;Integer&gt; resList = list.stream().limit(<span class="number">2</span>).collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::print);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="5）、sorted：用于对流进行排序"><a href="#5）、sorted：用于对流进行排序" class="headerlink" title="5）、sorted：用于对流进行排序"></a>5）、sorted：用于对流进行排序</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1、自然排序</span></span><br><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">3</span>); list.add(<span class="number">2</span>); list.add(<span class="number">10</span>);</span><br><span class="line">List&lt;Integer&gt; resList = list.stream().sorted().collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 降序</span></span><br><span class="line">List&lt;Integer&gt; reslist2 = list.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::print);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">12310</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">// 2、如果是对字符串排序，会根据ASCII值排序</span></span><br><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">"A"</span>); list.add(<span class="string">"a"</span>); list.add(<span class="string">"b"</span>); list.add(<span class="string">"B"</span>);</span><br><span class="line">List&lt;String&gt; resList = list.stream().sorted().collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::print);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line">ABab</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2、Comparator排序</span></span><br><span class="line">list.stream().sorted(Comparator.comparing(Student::getAge)) </span><br><span class="line">    </span><br><span class="line"><span class="comment">// 3、Comparator降序：reversed()</span></span><br><span class="line">list.stream().sorted(Comparator.comparing(Student::getAge).reversed())</span><br></pre></td></tr></table></figure>
+
+<h4 id="6）、distinct：去重"><a href="#6）、distinct：去重" class="headerlink" title="6）、distinct：去重"></a>6）、distinct：去重</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>); </span><br><span class="line">List&lt;Integer&gt; resList = list.stream().distinct().collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::println);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3、终止操作"><a href="#3、终止操作" class="headerlink" title="3、终止操作"></a>3、终止操作</h3><h4 id="1）、allMatch：接收一个-Predicate-函数，当流中每个元素都符合该断言时才返回true，否则返回false"><a href="#1）、allMatch：接收一个-Predicate-函数，当流中每个元素都符合该断言时才返回true，否则返回false" class="headerlink" title="1）、allMatch：接收一个 Predicate 函数，当流中每个元素都符合该断言时才返回true，否则返回false"></a>1）、allMatch：接收一个 Predicate 函数，当流中每个元素都符合该断言时才返回true，否则返回false</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 匹配所有的元素，如果所有元素都大于1,返回true，否则返回false</span></span><br><span class="line"><span class="keyword">boolean</span> b = list.stream().allMatch(i -&gt; i &gt; <span class="number">1</span>);</span><br><span class="line">resList.forEach(System.out::println);</span><br><span class="line">System.out.println(b);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="keyword">false</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2）、noneMatch：当流中每个元素都不符合该断言时才返回true，否则返回false"><a href="#2）、noneMatch：当流中每个元素都不符合该断言时才返回true，否则返回false" class="headerlink" title="2）、noneMatch：当流中每个元素都不符合该断言时才返回true，否则返回false"></a>2）、noneMatch：当流中每个元素都不符合该断言时才返回true，否则返回false</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">3</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 匹配所有的元素，如果没有元素大于1,返回true，否则返回false</span></span><br><span class="line"><span class="keyword">boolean</span> b = list.stream().noneMatch(i -&gt; i &gt; <span class="number">1</span>);</span><br><span class="line">System.out.println(b);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="keyword">true</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3）、anyMatch：只要流中有一个元素满足该断言则返回true，否则返回false"><a href="#3）、anyMatch：只要流中有一个元素满足该断言则返回true，否则返回false" class="headerlink" title="3）、anyMatch：只要流中有一个元素满足该断言则返回true，否则返回false"></a>3）、anyMatch：只要流中有一个元素满足该断言则返回true，否则返回false</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 匹配所有的元素，只要其中元素大于1,返回true，否则返回false</span></span><br><span class="line"><span class="keyword">boolean</span> b = list.stream().anyMatch(i -&gt; i &gt; <span class="number">1</span>);</span><br><span class="line">System.out.println(b);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="keyword">true</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4）、findFirst：返回流中第一个元素"><a href="#4）、findFirst：返回流中第一个元素" class="headerlink" title="4）、findFirst：返回流中第一个元素"></a>4）、findFirst：返回流中第一个元素</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 返回第一个元素，如果集合为空，则会返回 3</span></span><br><span class="line">Integer integer = list.stream().findFirst().orElse(<span class="number">3</span>);</span><br><span class="line">System.out.println(integer);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="5）、findAny：返回流中的任意元素"><a href="#5）、findAny：返回流中的任意元素" class="headerlink" title="5）、findAny：返回流中的任意元素"></a>5）、findAny：返回流中的任意元素</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line">Integer integer = list.stream().findAny().orElse(<span class="number">3</span>);</span><br><span class="line">System.out.println(integer);</span><br><span class="line"><span class="comment">// 如果是数据较少，串行地情况下，一般会返回第一个结果，如果是并行的情况，那就不能确保是第一个</span></span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="6）、count：返回流中元素的总个数"><a href="#6）、count：返回流中元素的总个数" class="headerlink" title="6）、count：返回流中元素的总个数"></a>6）、count：返回流中元素的总个数</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 返回第一个元素，如果集合为空，则会返回 3</span></span><br><span class="line">Integer integer = list.stream().count();</span><br><span class="line">System.out.println(integer);</span><br><span class="line"><span class="comment">// 如果是数据较少，串行地情况下，一般会返回第一个结果，如果是并行的情况，那就不能确保是第一个</span></span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="7）、max：返回最大值"><a href="#7）、max：返回最大值" class="headerlink" title="7）、max：返回最大值"></a>7）、max：返回最大值</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 返回最大值，如果集合为空，则会返回 3</span></span><br><span class="line">Integer integer = list.stream().max(Integer::compareTo).orElse(<span class="number">3</span>);</span><br><span class="line">System.out.println(integer);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
 
 
-</li>
+
+<h4 id="8）、min：返回最小值"><a href="#8）、min：返回最小值" class="headerlink" title="8）、min：返回最小值"></a>8）、min：返回最小值</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 返回最小值，如果集合为空，则会返回 0</span></span><br><span class="line">Integer integer = list.stream().min(Integer::compareTo).orElse(<span class="number">0</span>);</span><br><span class="line">System.out.println(integer);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="9）、collect：接收一个Collector实例，将流中元素收集成另外一个数据结构"><a href="#9）、collect：接收一个Collector实例，将流中元素收集成另外一个数据结构" class="headerlink" title="9）、collect：接收一个Collector实例，将流中元素收集成另外一个数据结构"></a>9）、collect：接收一个Collector实例，将流中元素收集成另外一个数据结构</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 转成List</span></span><br><span class="line">List&lt;Integer&gt; list1 = list.stream().distinct().collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 转成Set</span></span><br><span class="line">Set&lt;Integer&gt; set = list.stream().distinct().collect(Collectors.toSet());</span><br><span class="line"><span class="comment">//转成Map,注:key不能相同，否则报错</span></span><br><span class="line">Map&lt;String, Integer&gt; studentMap = list.stream().collect(Collectors.toMap(Student::getName, Student::getAge));</span><br></pre></td></tr></table></figure>
+
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2021/01/26/Java8%E4%B9%8BStream/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Centos 7 开机自启服务" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2021/01/26/Centos%207%20%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E6%9C%8D%E5%8A%A1/" target="_blank">Centos 7 开机自启服务</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2021/01/26/Centos%207%20%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E6%9C%8D%E5%8A%A1/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.896Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="Centos-7-开机自启服务"><a href="#Centos-7-开机自启服务" class="headerlink" title="Centos 7 开机自启服务"></a>Centos 7 开机自启服务</h1><h2 id="一、参数介绍"><a href="#一、参数介绍" class="headerlink" title="一、参数介绍"></a>一、参数介绍</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=描述信息</span><br><span class="line">After=network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking # 后台运行方式</span><br><span class="line">PIDFile=PID进程文件</span><br><span class="line">ExecStartPre=开启准备</span><br><span class="line">ExecStart=开启脚本</span><br><span class="line">ExecReload=重启脚本</span><br><span class="line">ExecStop=停止脚本</span><br><span class="line">KillSignal=停止信号量</span><br><span class="line">TimeoutStopSec=停止超时时间</span><br><span class="line">KillMode=杀掉模式</span><br><span class="line">PrivateTmp=true # 表示给服务分配独立的临时空间</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line"><span class="meta">#</span><span class="bash">脚本启动模式,多用户多网络</span></span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> [Service]下的脚本路径一定要是绝对路径</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="二、案例实操"><a href="#二、案例实操" class="headerlink" title="二、案例实操"></a>二、案例实操</h2><h3 id="1、流程"><a href="#1、流程" class="headerlink" title="1、流程"></a>1、流程</h3><ul>
+<li>准备好shell脚本</li>
+<li>新建服务文件</li>
+<li>编写服务文件</li>
+<li>设置开机启动</li>
 </ul>
-<p>  3、找到daemonize no改为yes<br>      注：快速查找字符串shell  :/daemo</p>
-<p><img src="http://i2.tiimg.com/721925/1fe54b453ac2fcff.png" alt="daemonize"></p>
-<h3 id="2-停止-1"><a href="#2-停止-1" class="headerlink" title="2.停止"></a>2.停止</h3><ol>
-<li><p>查找redis运行端口号</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux|grep redis</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>杀死redis进程</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -9 端口号</span><br></pre></td></tr></table></figure>
+<h3 id="2、开机自启nginx"><a href="#2、开机自启nginx" class="headerlink" title="2、开机自启nginx"></a>2、开机自启nginx</h3><h4 id="1）新建nginx服务文件"><a href="#1）新建nginx服务文件" class="headerlink" title="1）新建nginx服务文件"></a>1）新建nginx服务文件</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/lib/systemd/system/nginx.service</span><br></pre></td></tr></table></figure>
 
-</li>
-</ol>
+<h4 id="2）编写nginx服务文件"><a href="#2）编写nginx服务文件" class="headerlink" title="2）编写nginx服务文件"></a>2）编写nginx服务文件</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=开机自启nginx</span><br><span class="line">After=network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking</span><br><span class="line">ExecStart=/usr/local/nginx/sbin/nginx</span><br><span class="line">ExecReload=/usr/local/nginx/sbin/nginx -s reload</span><br><span class="line">ExecStop=/usr/local/nginx/sbin/nginx -s stop</span><br><span class="line">PrivateTmp=true</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<h4 id="3）设置开启启动"><a href="#3）设置开启启动" class="headerlink" title="3）设置开启启动"></a>3）设置开启启动</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 开机启动</span></span><br><span class="line">systemctl enable nginx.service</span><br><span class="line"><span class="meta">#</span><span class="bash"> 禁止开机启动</span></span><br><span class="line">systemctl disable nginx.service</span><br><span class="line"><span class="meta">#</span><span class="bash"> 开启服务 </span></span><br><span class="line">systemctl start nginx.service</span><br><span class="line"><span class="meta">#</span><span class="bash"> 停止服务</span></span><br><span class="line">systemctl stop nginx.service</span><br><span class="line"><span class="meta">#</span><span class="bash"> 重启服务</span></span><br><span class="line">systemctl restart nginx.service</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看所有已启动的服务</span></span><br><span class="line">systemctl list-units --type=service</span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看所有服务状态</span></span><br><span class="line">systemctl list-unit-files</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、开机自启redis"><a href="#3、开机自启redis" class="headerlink" title="3、开机自启redis"></a>3、开机自启redis</h3><h4 id="1）新建redis服务文件"><a href="#1）新建redis服务文件" class="headerlink" title="1）新建redis服务文件"></a>1）新建redis服务文件</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/lib/systemd/system/redis.service</span><br></pre></td></tr></table></figure>
+
+<h4 id="2）编写redis服务文件"><a href="#2）编写redis服务文件" class="headerlink" title="2）编写redis服务文件"></a>2）编写redis服务文件</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=开机自启redis</span><br><span class="line">After=network.target remote-fs.target nss-lookup.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking # 后台运行方式</span><br><span class="line">ExecStart=/usr/local/redis-6.0.5/bin/redis-server redis.conf</span><br><span class="line">PrivateTmp=true # 表示给服务分配独立的临时空间</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line"><span class="meta">#</span><span class="bash">脚本启动模式,多用户多网络</span></span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<h4 id="3）设置开机启动"><a href="#3）设置开机启动" class="headerlink" title="3）设置开机启动"></a>3）设置开机启动</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable redis.service</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4、开机自启jar包"><a href="#4、开机自启jar包" class="headerlink" title="4、开机自启jar包"></a>4、开机自启jar包</h3><h4 id="1）编写启动jar包脚本"><a href="#1）编写启动jar包脚本" class="headerlink" title="1）编写启动jar包脚本"></a>1）编写启动jar包脚本</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/voxtech/vox_system/start.sh  # 启动jar包服务</span><br><span class="line">vi /usr/local/voxtech/vox_system/restart.sh # 重启jar包服务</span><br><span class="line">vi /usr/local/voxtech/vox_system/stop.sh # 停止jar包服务</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 1、启动服务脚本内容</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">nohup java -jar ruoyi-admin.jar &amp;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 2、重启服务脚本内容</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> awk 以空格分段的字符串，显示第二行</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> grep -v PID  过滤出含有PID的行</span></span><br><span class="line">pid=`lsof -i:8080 | awk '&#123;print $2&#125;' | grep -v PID`</span><br><span class="line">if [ -n "$pid" ]</span><br><span class="line">then</span><br><span class="line">        echo "kill -9 pid:" $pid</span><br><span class="line">        kill -9 $pid</span><br><span class="line">fi</span><br><span class="line">./start.sh</span><br><span class="line"><span class="meta">#</span><span class="bash">nohup java -jar ruoyi-admin.jar &amp;</span></span><br><span class="line">echo "restart server.........."</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 3、停止服务脚本内容</span></span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">pid=`lsof -i:8080 | awk '&#123;print $2&#125;' | grep -v PID`</span><br><span class="line">if [ -n "$pid" ]</span><br><span class="line">then</span><br><span class="line">        echo "kill -9 pid:" $pid</span><br><span class="line">        kill -9 $pid</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<h4 id="2）新建启动jar包服务文件"><a href="#2）新建启动jar包服务文件" class="headerlink" title="2）新建启动jar包服务文件"></a>2）新建启动jar包服务文件</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/lib/systemd/system/app.service</span><br></pre></td></tr></table></figure>
+
+<h4 id="3）编写服务文件"><a href="#3）编写服务文件" class="headerlink" title="3）编写服务文件"></a>3）编写服务文件</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=开机自启app</span><br><span class="line">After=network.target remote-fs.target nss-lookup.target redis.service  #在redis服务启动之后启动</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=forking # 后台运行方式</span><br><span class="line">ExecStart=/usr/local/voxtech/vox_system/start</span><br><span class="line">ExecReload=/usr/local/voxtech/vox_system/restart</span><br><span class="line">ExecStop=/usr/local/voxtech/vox_system/stop</span><br><span class="line">PrivateTmp=true # 表示给服务分配独立的临时空间</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<h4 id="4）-设置开机启动服务"><a href="#4）-设置开机启动服务" class="headerlink" title="4） 设置开机启动服务"></a>4） 设置开机启动服务</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable app.service</span><br></pre></td></tr></table></figure>
+
 
     
 
@@ -724,22 +799,11 @@ java -version
   <div class="article-info article-info-index">
     
     
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
     
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2020/06/27/Linux%E5%90%84%E8%BD%AF%E4%BB%B6%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">展开全文 >></a>
+      <a class="article-more-a" href="/2021/01/26/Centos%207%20%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E6%9C%8D%E5%8A%A1/">展开全文 >></a>
     </p>
     
 
@@ -769,7 +833,7 @@ java -version
 
 
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-mysql更改默认存储位置" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
@@ -777,7 +841,7 @@ java -version
   
     <h1 itemprop="name">
 	
-	  <a class="article-title" href="/2020/06/13/hello-world/" target="_blank">hello-world</a>
+	  <a class="article-title" href="/2021/01/26/mysql%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/" target="_blank">mysql更改默认存储位置</a>
   
     </h1>
   
@@ -785,8 +849,8 @@ java -version
 
   
   
-<a href="/2020/06/13/hello-world/" class="archive-article-date">
-        <time datetime="2020-06-13T06:11:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-13</time>
+<a href="/2021/01/26/mysql%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.896Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
 </a>
 
   
@@ -798,7 +862,24 @@ java -version
   
   <div class="article-entry" itemprop="articleBody">
     
-    <h1 id="hello-world"><a href="#hello-world" class="headerlink" title="hello-world"></a>hello-world</h1><p>于2020/06/13 重新营业blog，记录问题、笔记，分享。</p>
+    <h1 id="mysql更改默认存储位置"><a href="#mysql更改默认存储位置" class="headerlink" title="mysql更改默认存储位置"></a>mysql更改默认存储位置</h1><h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>由于未来数据库会越来越大，服务器安装mysql默认位置的磁盘空间可能不够，这时需要将更改存储位置至磁盘宽裕的盘，于是就需要更改默认存储位置。</p>
+<h2 id="开整"><a href="#开整" class="headerlink" title="开整"></a>开整</h2><h3 id="1、查看当前mysql数据存储目录"><a href="#1、查看当前mysql数据存储目录" class="headerlink" title="1、查看当前mysql数据存储目录"></a>1、查看当前mysql数据存储目录</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@test-houtai mysql]# df -h /var/lib/mysql/</span><br><span class="line">文件系统                                容量  已用  可用 已用% 挂载点</span><br><span class="line">/dev/mapper/centos_test--houtai-root   50G  3.8G   47G    8% /</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 可以看出默认存储在/root根路径下</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2、停止mysql服务"><a href="#2、停止mysql服务" class="headerlink" title="2、停止mysql服务"></a>2、停止mysql服务</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@test-houtai home]# service mysqld stop</span><br><span class="line">Redirecting to /bin/systemctl stop mysqld.service</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、复制mysql目录"><a href="#3、复制mysql目录" class="headerlink" title="3、复制mysql目录"></a>3、复制mysql目录</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> -a 不能省</span></span><br><span class="line">cp -a /var/lib/mysql  /home/mysql</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> cp命令参数：</span></span><br><span class="line">-a：此参数的效果和同时指定”-dpR”参数相同；</span><br><span class="line">-d：当复制符号连接时，把目标文件或目录也建立为符号连接，并指向与源文件或目录连接的原始文件或目录；</span><br><span class="line">-p：保留源文件或目录的属性；</span><br><span class="line">-R/r：递归处理，将指定目录下的所有文件与子目录一并处理；</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、修改mysql配置文件"><a href="#4、修改mysql配置文件" class="headerlink" title="4、修改mysql配置文件"></a>4、修改mysql配置文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 先复制一下配置文件，以免改废了</span></span><br><span class="line">cp /etc/my.cnf /etc/my.cnfbak</span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改配置文件</span></span><br><span class="line">[client]</span><br><span class="line"><span class="meta">#</span><span class="bash"> port= 3308  -- 可配可不配</span></span><br><span class="line">socket= /home/mysql/mysql.sock   -----路径改到新的存储目录下/home/mysql</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">socket= /home/mysql/mysql.sock   -----路径改到新的存储目录下/home/mysql</span><br><span class="line">datadir= /home/mysql/mysql       -----路径改到新的存储目录下/home/mysql</span><br><span class="line"></span><br><span class="line">[mysqld_safe]</span><br><span class="line">socket=/home/mysql/mysql.sock    -----路径改到新的存储目录下/home/mysql</span><br><span class="line"></span><br><span class="line">[mysql.server]</span><br><span class="line">socket=/home/mysql.sock    -----路径改到新的存储目录下/home/mysql</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 其中[mysqld_safe]、[mysql.server] 没有 可不加</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5、启动mysql"><a href="#5、启动mysql" class="headerlink" title="5、启动mysql"></a>5、启动mysql</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql]#service mysqld start</span><br></pre></td></tr></table></figure>
+
+<h3 id="6、启动报错"><a href="#6、启动报错" class="headerlink" title="6、启动报错"></a>6、启动报错</h3><p>如果重新启动mysql失败</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看启动失败原因</span></span><br><span class="line">[root@localhost mysql]#systemctl status mysqld.service</span><br><span class="line">● mysqld.service - MySQL Server</span><br><span class="line">   Loaded: loaded (/usr/lib/systemd/system/mysqld.service; enabled; vendor preset: disabled)</span><br><span class="line">   Active: failed (Result: exit-code) since 四 2019-08-15 16:18:04 CST; 9s ago</span><br><span class="line">     Docs: man:mysqld(8)</span><br><span class="line">           http://dev.mysql.com/doc/refman/en/using-systemd.html</span><br><span class="line">  Process: 22032 ExecStart=/usr/sbin/mysqld $MYSQLD_OPTS (code=exited, status=1/FAILURE)</span><br><span class="line">  Process: 22015 ExecStartPre=/usr/bin/mysqld_pre_systemd (code=exited, status=0/SUCCESS)</span><br><span class="line"> Main PID: 22032 (code=exited, status=1/FAILURE)</span><br><span class="line">   Status: "SERVER_BOOTING"</span><br><span class="line">    Error: 13 (权限不够)</span><br><span class="line"></span><br><span class="line">8月 15 16:18:04 localhost.localdomain systemd[1]: Starting MySQL Server...</span><br><span class="line">8月 15 16:18:04 localhost.localdomain systemd[1]: mysqld.service: main process exited, code=exited, status=1/FAILURE</span><br><span class="line">8月 15 16:18:04 localhost.localdomain systemd[1]: Failed to start MySQL Server.</span><br><span class="line">8月 15 16:18:04 localhost.localdomain systemd[1]: Unit mysqld.service entered failed state.</span><br><span class="line">8月 15 16:18:04 localhost.localdomain systemd[1]: mysqld.service failed.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 提示权限不够，快速关闭SElinux</span></span><br><span class="line">[root@localhost mysql]#setenforce 0</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 然后重新启动mysql</span></span><br><span class="line">[root@localhost mysql]#service mysqld start</span><br></pre></td></tr></table></figure>
+
+
+
+
+
 
     
 
@@ -810,22 +891,11 @@ java -version
   <div class="article-info article-info-index">
     
     
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
     
 
     
     <p class="article-more-link">
-      <a class="article-more-a" href="/2020/06/13/hello-world/">展开全文 >></a>
+      <a class="article-more-a" href="/2021/01/26/mysql%E6%9B%B4%E6%94%B9%E9%BB%98%E8%AE%A4%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/">展开全文 >></a>
     </p>
     
 
@@ -855,6 +925,316 @@ java -version
 
 
   
+    <article id="post-数据库事务隔离级别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2021/01/26/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" target="_blank">数据库事务隔离级别</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2021/01/26/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.896Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="数据库事务隔离级别"><a href="#数据库事务隔离级别" class="headerlink" title="数据库事务隔离级别"></a>数据库事务隔离级别</h1><h2 id="数据库四大特性（ACID）"><a href="#数据库四大特性（ACID）" class="headerlink" title="数据库四大特性（ACID）"></a>数据库四大特性（ACID）</h2><h3 id="1、Atomicity-：-原子性"><a href="#1、Atomicity-：-原子性" class="headerlink" title="1、Atomicity ： 原子性"></a>1、Atomicity ： 原子性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">事务包含的所有操作要么全部成功，要么全部失败回滚</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、Consistency-：一致性"><a href="#2、Consistency-：一致性" class="headerlink" title="2、Consistency ：一致性"></a>2、Consistency ：一致性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。这是说数据库事务不能破坏关系数据的完整性以及业务逻辑上的一致性</span><br><span class="line">A给B转账<span class="number">1000</span>，最终结果是<span class="number">1000</span>，不会变成<span class="number">999</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3、Isolation：-隔离性"><a href="#3、Isolation：-隔离性" class="headerlink" title="3、Isolation： 隔离性"></a>3、Isolation： 隔离性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">多个并发的事务同时访问一个数据库时，一个事务不应该被另一个事务所干扰，每个并发的事务间要相互进行隔离。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4、Durability：-持久性"><a href="#4、Durability：-持久性" class="headerlink" title="4、Durability： 持久性"></a>4、Durability： 持久性</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">持久性是指一个事务一旦被提交了，那么对数据库中的数据的改变就是永久性的，即便是在数据库系统遇到故障的情况下也不会丢失提交事务的操作</span><br></pre></td></tr></table></figure>
+
+<h2 id="事务问题"><a href="#事务问题" class="headerlink" title="事务问题"></a>事务问题</h2><h3 id="1、脏读"><a href="#1、脏读" class="headerlink" title="1、脏读"></a>1、脏读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 存在事务A，事务B</span></span><br><span class="line"><span class="comment">// 此时事务A往数据库插入了一条数据：StudentA，但还未提交</span></span><br><span class="line"><span class="comment">// 这时候事务B查询数据库，查询出了：StudentA，事务直接没有隔离，就产生了“脏读”</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、不可重复读"><a href="#2、不可重复读" class="headerlink" title="2、不可重复读"></a>2、不可重复读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 存在事务A、B</span></span><br><span class="line"><span class="comment">// 事务A查询了 StudentA的数据，得到StudentA的姓名为 A</span></span><br><span class="line"><span class="comment">// 这时事务B更新了StudentA，将Student的姓名改为了 B，并且已经提交了事务</span></span><br><span class="line"><span class="comment">// 然后事务A再去查看StudentA的数据，两次查询出的结果不一致</span></span><br><span class="line"><span class="comment">// 这就是不可重复读</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3、幻读"><a href="#3、幻读" class="headerlink" title="3、幻读"></a>3、幻读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 存在事务A、B</span></span><br><span class="line"><span class="comment">// 事务A查询数据库所有的信息，假设只有StudentA的信息</span></span><br><span class="line"><span class="comment">// 事务B这时插入了一条StudentB的数据</span></span><br><span class="line"><span class="comment">// 事务A想再看下StudentA的具体数据，再去查询一遍数据，发现多出来了个StudentB</span></span><br><span class="line"><span class="comment">// 这就是幻读</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="四大隔离级别"><a href="#四大隔离级别" class="headerlink" title="四大隔离级别"></a>四大隔离级别</h2><h3 id="1、读未提交"><a href="#1、读未提交" class="headerlink" title="1、读未提交"></a>1、读未提交</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">多个事务时，会读取另一个事务未提交的数据。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、读已提交"><a href="#2、读已提交" class="headerlink" title="2、读已提交"></a>2、读已提交</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">只能读取其他事务已提交的数据。但是会有不可重复读的情况，即会读取其他事务修改提交后的数据。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3、可重复读"><a href="#3、可重复读" class="headerlink" title="3、可重复读"></a>3、可重复读</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">读取的数据不变，不会读取其他事务提交的数据。mysql默认级别。</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4、串行化"><a href="#4、串行化" class="headerlink" title="4、串行化"></a>4、串行化</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最高级别，读取时加锁，效率低。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="七种传播行为"><a href="#七种传播行为" class="headerlink" title="七种传播行为"></a>七种传播行为</h2><h3 id="1、PROPAGATION-REQUIRED"><a href="#1、PROPAGATION-REQUIRED" class="headerlink" title="1、PROPAGATION_REQUIRED"></a>1、PROPAGATION_REQUIRED</h3><p>如果当前没有事务，就创建一个新事务，如果当前存在事务，就加入该事务，该设置是最常用的设置。</p>
+<h3 id="2、PROPAGATION-SUPPORTS"><a href="#2、PROPAGATION-SUPPORTS" class="headerlink" title="2、PROPAGATION_SUPPORTS"></a>2、PROPAGATION_SUPPORTS</h3><p>支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就以非事务执行。‘</p>
+<h3 id="3、PROPAGATION-MANDATORY"><a href="#3、PROPAGATION-MANDATORY" class="headerlink" title="3、PROPAGATION_MANDATORY"></a>3、PROPAGATION_MANDATORY</h3><p>支持当前事务，如果当前存在事务，就加入该事务，如果当前不存在事务，就抛出异常。</p>
+<h3 id="4、PROPAGATION-REQUIRES-NEW"><a href="#4、PROPAGATION-REQUIRES-NEW" class="headerlink" title="4、PROPAGATION_REQUIRES_NEW"></a>4、PROPAGATION_REQUIRES_NEW</h3><p>创建新事务，无论当前存不存在事务，都创建新事务。</p>
+<h3 id="5、PROPAGATION-NOT-SUPPORTED"><a href="#5、PROPAGATION-NOT-SUPPORTED" class="headerlink" title="5、PROPAGATION_NOT_SUPPORTED"></a>5、PROPAGATION_NOT_SUPPORTED</h3><p>以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。</p>
+<h3 id="6、PROPAGATION-NEVER"><a href="#6、PROPAGATION-NEVER" class="headerlink" title="6、PROPAGATION_NEVER"></a>6、PROPAGATION_NEVER</h3><p>以非事务方式执行，如果当前存在事务，则抛出异常。</p>
+<h3 id="7、PROPAGATION-NESTED"><a href="#7、PROPAGATION-NESTED" class="headerlink" title="7、PROPAGATION_NESTED"></a>7、PROPAGATION_NESTED</h3><p>如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>为什么会出现“脏读”？</strong>因为没有“select”操作没有规矩。</p>
+<p><strong>为什么会出现“不可重复读”？</strong>因为“update”操作没有规矩。</p>
+<p><strong>为什么会出现“幻读”？</strong>因为“insert”和“delete”操作没有规矩。</p>
+<p><strong>“读未提（Read Uncommitted）”能预防啥？</strong>啥都预防不了。</p>
+<p><strong>“读提交（Read Committed）”能预防啥？</strong>使用“快照读（Snapshot Read）”，避免“脏读”，但是可能出现“不可重复读”和“幻读”。</p>
+<p><strong>“可重复读（Repeated Red）”能预防啥？</strong>使用“快照读（Snapshot Read）”，锁住被读取记录，避免出现“脏读”、“不可重复读”，但是可能出现“幻读”。</p>
+<p><strong>“串行化（Serializable）”能预防啥？</strong>排排坐，吃果果，有效避免“脏读”、“不可重复读”、“幻读”，不过效果谁用谁知道。</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2021/01/26/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-设计原则" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2021/01/26/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" target="_blank">设计原则</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2021/01/26/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.896Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h1><p>对于面向对象软件系统的设计而言，在支持可维护性的同时，提高系统的可复用性是一个至 关重要的问题，如何同时提高一个软件系统的可维护性和可复用性是面向对象设计需要解决 的核心问题之一。在面向对象设计中，可维护性的复用是以设计原则为基础的。每一个原则 都蕴含一些面向对象设计的思想，可以从不同的角度提升一个软件结构的设计水平。<br>面向对象设计原则为支持可维护性复用而诞生，这些原则蕴含在很多设计模式中，它们是从 许多设计方案中总结出的指导性原则。面向对象设计原则也是我们用于评价一个设计模式的 使用效果的重要指标之一，在设计模式的学习中，大家经常会看到诸如“XXX模式符合XXX原 则”、“XXX模式违反了XXX原则”这样的语句。</p>
+<h2 id="一、单一职责原则"><a href="#一、单一职责原则" class="headerlink" title="一、单一职责原则"></a>一、单一职责原则</h2><h3 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h3><p>一个类只负责一个功能领域中的相应职责，或者可以定义为：就一个类而言，应该只有一个引起它变化的原因</p>
+<p>一个类不能太“累”！在软件系统中，一个类（大到模块，小到方法） 承担的职责越多，它被复用的可能性就越小，而且一个类承担的职责过多，就相当于将这些 职责耦合在一起，当其中一个职责变化时，可能会影响其他职责的运作，因此要将这些职责 进行分离，将不同的职责封装在不同的类中，即将不同的变化原因封装在不同的类中，如果 多个职责总是同时发生改变则可将它们封装在同一类中。</p>
+<h2 id="二、开闭原则"><a href="#二、开闭原则" class="headerlink" title="二、开闭原则"></a>二、开闭原则</h2><h3 id="1、定义-1"><a href="#1、定义-1" class="headerlink" title="1、定义"></a>1、定义</h3><p>一个软件实体应当对扩展开放，对修改关闭。即软件 实体应尽量在不修改原有代码的情况下进行扩展。它是最重要的面向对象设计原则。</p>
+<p>任何软件都需要面临一个很重要的问题，即它们的需求会随时间的推移而发生变化。当软件 系统需要面对新的需求时，我们应该尽量保证系统的设计框架是稳定的。如果一个软件设计 符合开闭原则，那么可以非常方便地对系统进行扩展，而且在扩展时无须修改现有代码，使 得软件系统在拥有适应性和灵活性的同时具备较好的稳定性和延续性。随着软件规模越来越 大，软件寿命越来越长，软件维护成本越来越高，设计满足开闭原则的软件系统也变得越来 越重要。</p>
+<h2 id="三、里氏代换原则"><a href="#三、里氏代换原则" class="headerlink" title="三、里氏代换原则"></a>三、里氏代换原则</h2><h3 id="1、定义-2"><a href="#1、定义-2" class="headerlink" title="1、定义"></a>1、定义</h3><p>所有引用基类 （父类）的地方必须能透明地使用其子类的对象。</p>
+<p>在软件中将一个基类对象替换成它的子类对象，程序将不会产生任 何错误和异常，反过来则不成立，如果一个软件实体使用的是一个子类对象的话，那么它不 一定能够使用基类对象。例如：我喜欢动物，那我一定喜欢狗，因为狗是动物的子类；但是 我喜欢狗，不能据此断定我喜欢动物，因为我并不喜欢老鼠，虽然它也是动物。</p>
+<p>里氏代换原则是实现开闭原则的重要方式之一，由于使用基类对象的地方都可以使用子类对 象，因此在程序中尽量使用基类类型来对对象进行定义，而在运行时再确定其子类类型，用 子类对象来替换父类对象。</p>
+<h2 id="四、依赖倒转原则"><a href="#四、依赖倒转原则" class="headerlink" title="四、依赖倒转原则"></a>四、依赖倒转原则</h2><h3 id="1、定义-3"><a href="#1、定义-3" class="headerlink" title="1、定义"></a>1、定义</h3><p>如果说开闭原则是面向对象设计的目标的话，那么依赖倒转原则就是面向对象设计的主要实 现机制之一。</p>
+<p>抽象不应该依赖于细节，细节应 当依赖于抽象。换言之，要针对接口编程，而不是针对实现编程。</p>
+<p>依赖倒转原则要求我们在程序代码中传递参数时或在关联关系中，尽量引用层次高的抽象层 类，即使用接口和抽象类进行变量类型声明、参数类型声明、方法返回类型声明，以及数据 类型的转换等，而不要用具体类来做这些事情</p>
+<h2 id="五、接口隔离原则"><a href="#五、接口隔离原则" class="headerlink" title="五、接口隔离原则"></a>五、接口隔离原则</h2><h3 id="1、定义-4"><a href="#1、定义-4" class="headerlink" title="1、定义"></a>1、定义</h3><p>使用多个专门的接口，而不使用单一 的总接口，即客户端不应该依赖那些它不需要的接口。</p>
+<p>当一个接口太大时，我们需要将它分割成一些更细小的接口，使用该接 口的客户端仅需知道与之相关的方法即可。每一个接口应该承担一种相对独立的角色，不干 不该干的事，该干的事都要干。</p>
+<h2 id="六、合成复用原则"><a href="#六、合成复用原则" class="headerlink" title="六、合成复用原则"></a>六、合成复用原则</h2><h3 id="1、定义-5"><a href="#1、定义-5" class="headerlink" title="1、定义"></a>1、定义</h3><p>尽量使用对象组合，而不是继承来达到复用的目的。</p>
+<h2 id="七、迪米特法则"><a href="#七、迪米特法则" class="headerlink" title="七、迪米特法则"></a>七、迪米特法则</h2><h3 id="1、定义-6"><a href="#1、定义-6" class="headerlink" title="1、定义"></a>1、定义</h3><p>一个软件实体应当尽可能少地与其他实体发生相互作用。</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2021/01/26/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Linux防火墙相关命令" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+  
+  
+    <h1 itemprop="name">
+	
+	  <a class="article-title" href="/2021/01/26/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" target="_blank">Linux防火墙相关命令</a>
+  
+    </h1>
+  
+
+
+  
+  
+<a href="/2021/01/26/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.886Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
+
+  
+  
+    
+
+  
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="Centos-7-防火墙"><a href="#Centos-7-防火墙" class="headerlink" title="Centos 7 防火墙"></a>Centos 7 防火墙</h1><h4 id="1、查看已开放的端口"><a href="#1、查看已开放的端口" class="headerlink" title="1、查看已开放的端口"></a><strong>1、查看已开放的端口</strong></h4><p>firewall-cmd –list-ports</p>
+<p><strong>2、开放端口</strong>（开放后需要要重启防火墙才生效）</p>
+<p>firewall-cmd –zone=public –add-port=3338/tcp –permanent</p>
+<p>firewall-cmd –zone=public –add-port=8088/tcp –permanent</p>
+<p><strong>3、重启防火墙</strong></p>
+<p>firewall-cmd –reload</p>
+<p><strong>4、关闭端口</strong>（关闭后需要要重启防火墙才生效）</p>
+<p>firewall-cmd –zone=public –remove-port=3338/tcp –permanent</p>
+<h4 id="5、开机启动防火墙"><a href="#5、开机启动防火墙" class="headerlink" title="5、开机启动防火墙"></a>5、开机启动防火墙</h4><p>systemctl enable firewalld</p>
+<p><strong>6、开启防火墙</strong></p>
+<p>systemctl start firewalld</p>
+<h4 id="7、禁止防火墙开机启动"><a href="#7、禁止防火墙开机启动" class="headerlink" title="7、禁止防火墙开机启动"></a><strong>7、禁止防火墙开机启动</strong></h4><p>systemctl disable firewalld</p>
+<h4 id="8、停止防火墙"><a href="#8、停止防火墙" class="headerlink" title="8、停止防火墙"></a><strong>8、停止防火墙</strong></h4><p>systemctl stop firewalld</p>
+
+    
+
+    
+
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+    <p class="article-more-link">
+      <a class="article-more-a" href="/2021/01/26/Linux%E9%98%B2%E7%81%AB%E5%A2%99%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4/">展开全文 >></a>
+    </p>
+    
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    </nav>
   
 
 
@@ -967,15 +1347,11 @@ java -version
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -983,7 +1359,7 @@ java -version
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
             
             <div class="clearfix"></div>

@@ -18,11 +18,10 @@
 <meta property="og:description" content="Linux安装java环境Linux系统centos7 JavaJDK1.8 jdk-8u251-linux-x64.tar.gz 下载安装1、安装前检查系统是否已安装jdkjava -verson如果未安装则会显示 -bash: java: 未找到命令已安装则会显示对应的版本信息 [root@test-houtaimyql voxtech]# java -version java version">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://i2.tiimg.com/721925/3ff5b8e048087392.png">
-<meta property="article:published_time" content="2020-06-27T03:08:11.000Z">
-<meta property="article:modified_time" content="2020-06-27T03:21:00.911Z">
+<meta property="article:published_time" content="2020-06-27T03:08:11.243Z">
+<meta property="article:modified_time" content="2020-06-27T02:39:34.255Z">
 <meta property="article:author" content="Liguras">
-<meta property="article:tag" content="linux">
-<meta property="article:tag" content="java">
+<meta property="article:tag" content="分享、笔记、后端、java">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://i2.tiimg.com/721925/3ff5b8e048087392.png">
   
@@ -225,7 +224,7 @@
         </span>
 
 <a href="/2020/06/27/Linux%E5%AE%89%E8%A3%85java/" class="archive-article-date">
-        <time datetime="2020-06-27T03:08:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-27</time>
+        <time datetime="2020-06-27T03:08:11.243Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-27</time>
 </a>
 
   
@@ -238,7 +237,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">597字</span>
+      <span class="post-count">601字</span>
     </span>
   </span>
 
@@ -269,41 +268,34 @@ Java(TM) SE Runtime Environment (build 1.8.0_221-b11)
 Java HotSpot(TM) 64-Bit Server VM (build 25.221-b11, mixed mode)</code></pre><p>如果需要更换jdk，下面会有介绍</p>
 <h4 id="2、开始安装"><a href="#2、开始安装" class="headerlink" title="2、开始安装"></a>2、开始安装</h4><ol>
 <li><p>下载好的jdk上传到服务器（上传下载可用rz、sz命令）</p>
-<p>rz、sz需要下载</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install lrzsz</span><br></pre></td></tr></table></figure>
-
-<p>然后就可以开始上传jdk了</p>
+<p> rz、sz需要下载</p>
+<pre><code>yum install lrzsz</code></pre><p> 然后就可以开始上传jdk了</p>
 </li>
 </ol>
-<ul>
-<li><p>切换到上传路径，一般为/usr/local</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local</span><br><span class="line">rz  # 然后选中jdk，等待上传完成</span><br><span class="line">ls  # 查看当前目录,查看jdk是否已存在</span><br></pre></td></tr></table></figure>
+<pre><code>-  切换到上传路径，一般为/usr/local
 
-</li>
-</ul>
-<ol start="2">
+        cd /usr/local
+        rz  # 然后选中jdk，等待上传完成
+        ls  # 查看当前目录,查看jdk是否已存在</code></pre><ol start="2">
 <li><p>解压</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf jdk-8u251-linux-x64.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 解压完后，文件夹名为:	jdk1.8.0_251</span></span><br></pre></td></tr></table></figure>
+<pre><code>tar -zxvf jdk-8u251-linux-x64.tar.gz</code></pre><p>解压完后，文件夹名为:    jdk1.8.0_251</p>
 </li>
 <li><p>重命名</p>
- <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv jdk1.8.0_251 java</span><br></pre></td></tr></table></figure>
-</li>
+<pre><code>mv jdk1.8.0_251 java</code></pre></li>
 <li><p>修改配置文件</p>
-<p>vi /etc/profile</p>
-</li>
+<pre><code>vi /etc/profile</code></pre></li>
 <li><p>在配置文件最后面加上下面代码</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">export JAVA_HOME=/usr/local/java</span><br><span class="line">export PATH=$PATH:$JAVA_HOME/bin</span><br><span class="line">export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span><br><span class="line">export JRE_HOME=$JAVA_HOME/jre</span><br></pre></td></tr></table></figure>
-
-<p>然后保存退出</p>
-<p>如图：</p>
-<p><img src="http://i2.tiimg.com/721925/3ff5b8e048087392.png" alt="jdk配置"></p>
+<pre><code>export JAVA_HOME=/usr/local/java
+export PATH=$PATH:$JAVA_HOME/bin
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export JRE_HOME=$JAVA_HOME/jre</code></pre><p> 然后保存退出</p>
+<p> 如图：</p>
+<p> <img src="http://i2.tiimg.com/721925/3ff5b8e048087392.png" alt="jdk配置"></p>
 </li>
 <li><p>让配置文件生效</p>
-<p>source /etc/profile</p>
-</li>
+<pre><code>source /etc/profile</code></pre></li>
 <li><p>查看是否安装成功</p>
-<p>java -version</p>
-</li>
+<pre><code>java -version</code></pre></li>
 </ol>
 <h2 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h2><h3 id="1、将安装包删除"><a href="#1、将安装包删除" class="headerlink" title="1、将安装包删除"></a>1、将安装包删除</h3><pre><code>rm -rf /usr/local/java</code></pre><h3 id="2、修改配置文件"><a href="#2、修改配置文件" class="headerlink" title="2、修改配置文件"></a>2、修改配置文件</h3><pre><code>将原来配置的代码删除即可，保存，然后重新生效</code></pre><h1 id="删除Openjdk"><a href="#删除Openjdk" class="headerlink" title="删除Openjdk"></a>删除Openjdk</h1><p>如果系统自带OpenJDK，但是版本不是你想要的，或者想换成oracle的JDK，这时就可以更换了</p>
 <h2 id="1、查找安装位置"><a href="#1、查找安装位置" class="headerlink" title="1、查找安装位置"></a>1、查找安装位置</h2><pre><code>[root@java-test-01 ~]# rpm -qa | grep java
@@ -375,21 +367,6 @@ java -version
   <div class="article-info article-info-index">
     
     
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
     
 
     
@@ -634,15 +611,11 @@ java -version
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">linux</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -650,7 +623,7 @@ java -version
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">java</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
             
             <div class="clearfix"></div>

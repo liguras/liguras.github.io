@@ -6,17 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://www.liguras.cn">
-  <title>Archives: 2020/7 | Liguras</title>
+  <title>Java8之Stream | Liguras</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="description" content="CV工程师">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Liguras">
-<meta property="og:url" content="http://www.liguras.cn/archives/2020/07/index.html">
+  <meta name="description" content="Java8之Stream(一)一、介绍Java 8 API添加了一个新的抽象称为流Stream，可以让你以一种声明的方式处理数据。 什么是声明式（函数式）编程，什么是命令式编程？ 什么是流Stream（流）是一个来自数据源的元素队列并支持聚合操作。 数据源：可以是可以是集合，数组，I&#x2F;O channel等 聚合操作：类似SQL语句一样的操作， 比如filter, map, reduce, find">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java8之Stream">
+<meta property="og:url" content="http://www.liguras.cn/2021/01/26/Java8%E4%B9%8BStream/index.html">
 <meta property="og:site_name" content="Liguras">
-<meta property="og:description" content="CV工程师">
+<meta property="og:description" content="Java8之Stream(一)一、介绍Java 8 API添加了一个新的抽象称为流Stream，可以让你以一种声明的方式处理数据。 什么是声明式（函数式）编程，什么是命令式编程？ 什么是流Stream（流）是一个来自数据源的元素队列并支持聚合操作。 数据源：可以是可以是集合，数组，I&#x2F;O channel等 聚合操作：类似SQL语句一样的操作， 比如filter, map, reduce, find">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-26T12:14:03.896Z">
+<meta property="article:modified_time" content="2021-01-26T12:13:18.514Z">
 <meta property="article:author" content="Liguras">
 <meta property="article:tag" content="分享、笔记、后端、java">
 <meta name="twitter:card" content="summary">
@@ -200,69 +202,293 @@
               class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Java8之Stream" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	
-<a href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" class="archive-article-date">
-        <time datetime="2020-07-04T11:46:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-04</time>
-</a>
-
-        </div>
-    	 
+      <header class="article-header">
   
-    <h1 itemprop="name">
-	
-	  <a class="archive-article-title" href="/2020/07/04/Linux%E5%A4%87%E4%BB%BDmysql/" target="_blank">Linux备份mysql</a>
   
+    <h1 class="article-title" itemprop="name">
+      Java8之Stream
     </h1>
   
 
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		
-		</ul>
-	</div>
+  
+  
+        
+        <span id="busuanzi_container_page_pv" style='display:none' class="archive-article-date">
+              <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+        </span>
 
-          
+<a href="/2021/01/26/Java8%E4%B9%8BStream/" class="archive-article-date">
+        <time datetime="2021-01-26T12:14:03.896Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-26</time>
+</a>
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
+    
+<div style="margin-top:10px;">
+  <span class="post-time">
+    <span class="post-meta-item-icon">
+      <!-- fonts.scss -->
+      <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
+      <i class="icon-statistics"></i>
+      <span class="post-meta-item-text"> 字数统计:</span>
+      <span class="post-count">1.5k字</span>
+    </span>
+  </span>
+
+  <span class="post-time">
+    &nbsp; | &nbsp;
+    <span class="post-meta-item-icon">
+      <i class="icon-book icon"></i>
+      <span class="post-meta-item-text"> 阅读时长≈</span>
+      <span class="post-count">6分</span>
+    </span>
+  </span>
+</div>
+
+
   
+  </header>
+  
+  <div class="article-entry" itemprop="articleBody">
+    
+    <h1 id="Java8之Stream-一"><a href="#Java8之Stream-一" class="headerlink" title="Java8之Stream(一)"></a>Java8之Stream(一)</h1><h2 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h2><p>Java 8 API添加了一个新的抽象称为流Stream，可以让你以一种声明的方式处理数据。</p>
+<p>什么是声明式（函数式）编程，什么是命令式编程？</p>
+<h3 id="什么是流"><a href="#什么是流" class="headerlink" title="什么是流"></a>什么是流</h3><p>Stream（流）是一个来自数据源的元素队列并支持聚合操作。</p>
+<p>数据源：可以是可以是集合，数组，I/O channel等</p>
+<p>聚合操作：类似SQL语句一样的操作， 比如filter, map, reduce, find, match, sorted等。</p>
+<h3 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h3><p>1、创建Stream</p>
+<p>2、中间操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一个流可以后面跟随零个或多个中间操作。其目的主要是打开流，做出某种程度的数据映射/过滤，然后返回一个新的流，交给下一个操作使用</span><br></pre></td></tr></table></figure>
+
+<p>3、终止操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一个流只能有一个终止操作，当这个操作执行后，流就被使用“光”了，无法再被操作。所以这必定是流的最后一个操作。Terminal 操作的执行，才会真正开始流的遍历，并且会生成一个结果</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="二、API使用"><a href="#二、API使用" class="headerlink" title="二、API使用"></a>二、API使用</h2><h3 id="1、创建流Stream"><a href="#1、创建流Stream" class="headerlink" title="1、创建流Stream"></a>1、创建流Stream</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">String [] strArray = <span class="keyword">new</span> String[] &#123;<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>&#125;;</span><br><span class="line"><span class="comment">// 1、Stream.of</span></span><br><span class="line">Stream stream = Stream.of(strArray);</span><br><span class="line"><span class="comment">// 2、Arrays.of</span></span><br><span class="line">stream = Arrays.stream(strArray);</span><br><span class="line"><span class="comment">// 3、Collections</span></span><br><span class="line">List&lt;String&gt; list = Arrays.asList(strArray);</span><br><span class="line"><span class="comment">// 创建串行流</span></span><br><span class="line">stream = list.stream();</span><br><span class="line"><span class="comment">// 创建并行流</span></span><br><span class="line">stream = list.parallelStream();</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、中间操作-API"><a href="#2、中间操作-API" class="headerlink" title="2、中间操作-API"></a>2、中间操作-API</h3><h4 id="1）、forEach：遍历"><a href="#1）、forEach：遍历" class="headerlink" title="1）、forEach：遍历"></a>1）、forEach：遍历</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 涉及到java 8 两个新语法，一个是方法引用，一个是Lambda表达式</span></span><br><span class="line">list.forEach(System.out::println);</span><br><span class="line">list.forEach( i -&gt; &#123;</span><br><span class="line">    System.out.print(i);</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-、map：用于映射每个元素到对应的结果"><a href="#2-、map：用于映射每个元素到对应的结果" class="headerlink" title="2)、map：用于映射每个元素到对应的结果"></a>2)、map：用于映射每个元素到对应的结果</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); </span><br><span class="line">List&lt;Integer&gt; resList = list.stream().map( i -&gt; i + <span class="number">1</span>).collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::print);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">23</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-、filter：用于通过设置的条件过滤出元素"><a href="#3-、filter：用于通过设置的条件过滤出元素" class="headerlink" title="3)、filter：用于通过设置的条件过滤出元素"></a>3)、filter：用于通过设置的条件过滤出元素</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); </span><br><span class="line">List&lt;Integer&gt; resList = list.stream().filter( i -&gt; i &gt; <span class="number">1</span>).collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::println);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4）、limit：用于获取指定数量的流"><a href="#4）、limit：用于获取指定数量的流" class="headerlink" title="4）、limit：用于获取指定数量的流"></a>4）、limit：用于获取指定数量的流</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">3</span>); </span><br><span class="line"><span class="comment">// list是有序的，从第一个元素开始算</span></span><br><span class="line">List&lt;Integer&gt; resList = list.stream().limit(<span class="number">2</span>).collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::print);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="5）、sorted：用于对流进行排序"><a href="#5）、sorted：用于对流进行排序" class="headerlink" title="5）、sorted：用于对流进行排序"></a>5）、sorted：用于对流进行排序</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1、自然排序</span></span><br><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">3</span>); list.add(<span class="number">2</span>); list.add(<span class="number">10</span>);</span><br><span class="line">List&lt;Integer&gt; resList = list.stream().sorted().collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 降序</span></span><br><span class="line">List&lt;Integer&gt; reslist2 = list.stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::print);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">12310</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">// 2、如果是对字符串排序，会根据ASCII值排序</span></span><br><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">"A"</span>); list.add(<span class="string">"a"</span>); list.add(<span class="string">"b"</span>); list.add(<span class="string">"B"</span>);</span><br><span class="line">List&lt;String&gt; resList = list.stream().sorted().collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::print);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line">ABab</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2、Comparator排序</span></span><br><span class="line">list.stream().sorted(Comparator.comparing(Student::getAge)) </span><br><span class="line">    </span><br><span class="line"><span class="comment">// 3、Comparator降序：reversed()</span></span><br><span class="line">list.stream().sorted(Comparator.comparing(Student::getAge).reversed())</span><br></pre></td></tr></table></figure>
+
+<h4 id="6）、distinct：去重"><a href="#6）、distinct：去重" class="headerlink" title="6）、distinct：去重"></a>6）、distinct：去重</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>); </span><br><span class="line">List&lt;Integer&gt; resList = list.stream().distinct().collect(Collectors.toList());</span><br><span class="line">resList.forEach(System.out::println);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3、终止操作"><a href="#3、终止操作" class="headerlink" title="3、终止操作"></a>3、终止操作</h3><h4 id="1）、allMatch：接收一个-Predicate-函数，当流中每个元素都符合该断言时才返回true，否则返回false"><a href="#1）、allMatch：接收一个-Predicate-函数，当流中每个元素都符合该断言时才返回true，否则返回false" class="headerlink" title="1）、allMatch：接收一个 Predicate 函数，当流中每个元素都符合该断言时才返回true，否则返回false"></a>1）、allMatch：接收一个 Predicate 函数，当流中每个元素都符合该断言时才返回true，否则返回false</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 匹配所有的元素，如果所有元素都大于1,返回true，否则返回false</span></span><br><span class="line"><span class="keyword">boolean</span> b = list.stream().allMatch(i -&gt; i &gt; <span class="number">1</span>);</span><br><span class="line">resList.forEach(System.out::println);</span><br><span class="line">System.out.println(b);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="keyword">false</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2）、noneMatch：当流中每个元素都不符合该断言时才返回true，否则返回false"><a href="#2）、noneMatch：当流中每个元素都不符合该断言时才返回true，否则返回false" class="headerlink" title="2）、noneMatch：当流中每个元素都不符合该断言时才返回true，否则返回false"></a>2）、noneMatch：当流中每个元素都不符合该断言时才返回true，否则返回false</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">3</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 匹配所有的元素，如果没有元素大于1,返回true，否则返回false</span></span><br><span class="line"><span class="keyword">boolean</span> b = list.stream().noneMatch(i -&gt; i &gt; <span class="number">1</span>);</span><br><span class="line">System.out.println(b);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="keyword">true</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3）、anyMatch：只要流中有一个元素满足该断言则返回true，否则返回false"><a href="#3）、anyMatch：只要流中有一个元素满足该断言则返回true，否则返回false" class="headerlink" title="3）、anyMatch：只要流中有一个元素满足该断言则返回true，否则返回false"></a>3）、anyMatch：只要流中有一个元素满足该断言则返回true，否则返回false</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 匹配所有的元素，只要其中元素大于1,返回true，否则返回false</span></span><br><span class="line"><span class="keyword">boolean</span> b = list.stream().anyMatch(i -&gt; i &gt; <span class="number">1</span>);</span><br><span class="line">System.out.println(b);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="keyword">true</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4）、findFirst：返回流中第一个元素"><a href="#4）、findFirst：返回流中第一个元素" class="headerlink" title="4）、findFirst：返回流中第一个元素"></a>4）、findFirst：返回流中第一个元素</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 返回第一个元素，如果集合为空，则会返回 3</span></span><br><span class="line">Integer integer = list.stream().findFirst().orElse(<span class="number">3</span>);</span><br><span class="line">System.out.println(integer);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="5）、findAny：返回流中的任意元素"><a href="#5）、findAny：返回流中的任意元素" class="headerlink" title="5）、findAny：返回流中的任意元素"></a>5）、findAny：返回流中的任意元素</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line">Integer integer = list.stream().findAny().orElse(<span class="number">3</span>);</span><br><span class="line">System.out.println(integer);</span><br><span class="line"><span class="comment">// 如果是数据较少，串行地情况下，一般会返回第一个结果，如果是并行的情况，那就不能确保是第一个</span></span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="6）、count：返回流中元素的总个数"><a href="#6）、count：返回流中元素的总个数" class="headerlink" title="6）、count：返回流中元素的总个数"></a>6）、count：返回流中元素的总个数</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 返回第一个元素，如果集合为空，则会返回 3</span></span><br><span class="line">Integer integer = list.stream().count();</span><br><span class="line">System.out.println(integer);</span><br><span class="line"><span class="comment">// 如果是数据较少，串行地情况下，一般会返回第一个结果，如果是并行的情况，那就不能确保是第一个</span></span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="7）、max：返回最大值"><a href="#7）、max：返回最大值" class="headerlink" title="7）、max：返回最大值"></a>7）、max：返回最大值</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 返回最大值，如果集合为空，则会返回 3</span></span><br><span class="line">Integer integer = list.stream().max(Integer::compareTo).orElse(<span class="number">3</span>);</span><br><span class="line">System.out.println(integer);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="8）、min：返回最小值"><a href="#8）、min：返回最小值" class="headerlink" title="8）、min：返回最小值"></a>8）、min：返回最小值</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 返回最小值，如果集合为空，则会返回 0</span></span><br><span class="line">Integer integer = list.stream().min(Integer::compareTo).orElse(<span class="number">0</span>);</span><br><span class="line">System.out.println(integer);</span><br><span class="line"><span class="comment">// 结果</span></span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="9）、collect：接收一个Collector实例，将流中元素收集成另外一个数据结构"><a href="#9）、collect：接收一个Collector实例，将流中元素收集成另外一个数据结构" class="headerlink" title="9）、collect：接收一个Collector实例，将流中元素收集成另外一个数据结构"></a>9）、collect：接收一个Collector实例，将流中元素收集成另外一个数据结构</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="number">1</span>); list.add(<span class="number">2</span>); list.add(<span class="number">2</span>);</span><br><span class="line"><span class="comment">// 转成List</span></span><br><span class="line">List&lt;Integer&gt; list1 = list.stream().distinct().collect(Collectors.toList());</span><br><span class="line"><span class="comment">// 转成Set</span></span><br><span class="line">Set&lt;Integer&gt; set = list.stream().distinct().collect(Collectors.toSet());</span><br><span class="line"><span class="comment">//转成Map,注:key不能相同，否则报错</span></span><br><span class="line">Map&lt;String, Integer&gt; studentMap = list.stream().collect(Collectors.toMap(Student::getName, Student::getAge));</span><br></pre></td></tr></table></figure>
+
 
     
+
+    
+    <div class="page-reward">
+      <a href="javascript:void(0);" class="page-reward-btn tooltip-top" target="_self">
+        <div class="tooltip tooltip-east">
+          <span class="tooltip-item">
+            赏
+          </span>
+          <span class="tooltip-content">
+            <span class="tooltip-text">
+              <span class="tooltip-inner">
+                <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃烧烤<i
+                    class="icon icon-quo-right"></i></p>
+                <div class="reward-box">
+                  
+                  
+                </div>
+              </span>
+            </span>
+          </span>
+        </div>
+      </a>
+    </div>
+    
+
+    
+    <div class="declare"> 
+      <ul class="post-copyright">
+        <li>
+          <strong>本文作者：</strong>
+          Liguras
+        </li>
+        <li>
+          <strong>本文链接：</strong>
+          <a href="http://www.liguras.cn/2021/01/26/Java8之Stream/" title="Java8之Stream" target="_blank">http://www.liguras.cn/2021/01/26/Java8之Stream/</a>
+        </li>
+        
+        <li>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，均采用 <a href="https://github.com/JoeyBling/hexo-theme-yilia-plus/blob/master/LICENSE" rel="external nofollow" target="_blank">MIT</a> 许可协议。转载请注明出处！
+        </li>
+        
+      </ul>
+    </div>
+    
+
+  </div>
+  <div class="article-info article-info-index">
+    
+    
+    
+
+    
+
+    
+    
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <!-- <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a> -->
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+     <!-- <img src="//pan.baidu.com/share/qrcode?url=http://www.liguras.cn/2021/01/26/Java8%E4%B9%8BStream/" alt="微信分享二维码"> -->
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+
+    
+    <div class="clearfix"></div>
+  </div>
+  </div>
+</article>
+
+
+<nav id="article-nav">
+  
+    <a href="/2021/01/26/Linux%E5%AE%89%E8%A3%85mysql/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Linux安装mysql
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/01/26/Centos%207%20%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E6%9C%8D%E5%8A%A1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Centos 7 开机自启服务</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+
+
+
+
+
+
+
+  
+  <div id="gitment-ctn"></div>
+  
+    <!-- 中文 -->
+    <link rel="stylesheet" href="/lib/gitment.css">
+    <script src="/lib/gitment.js"></script>
+  
+  <script>
+    <!-- id: "Java8之Stream" -->
+    var gitment = new Gitment({
+      id: "20210126201403",
+      owner: 'liguras',
+      repo: 'liguras.github.io',
+      oauth: {
+        client_id: 'a973b72834a3ce7596fa',
+        client_secret: '94254df5473f53170f521c02e765f32bf6d9fc04',
+      },
+    })
+    gitment.render('gitment-ctn')
+  </script>
+
+
+  
+
 
 
           </div>
@@ -303,8 +529,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
